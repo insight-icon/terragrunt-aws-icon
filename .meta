@@ -1,0 +1,17 @@
+{
+  "projects": {
+  	"us-east-1/main/prep-basic": "https://github.com/insight-infrastructure/terragrunt-aws-icon-prep-basic",
+  	"us-east-1/main/prep-ha": "https://github.com/insight-infrastructure/terragrunt-aws-icon-prep-ha",
+  	"packer": "https://github.com/insight-infrastructure/packer-icon-prep",
+  	"ansible": "https://github.com/insight-infrastructure/ansible-icon-prep",
+  	"modules/terraform-aws-icon-p-rep-node": "https://github.com/insight-infrastructure/terraform-aws-icon-p-rep-node",
+    "modules/terraform-aws-icon-user-data": "https://github.com/insight-infrastructure/terraform-aws-icon-user-data",
+    "modules/tf_aws_bastion_s3_keys_tmp": "https://github.com/robc-io/tf_aws_bastion_s3_keys_tmp",
+    "modules/terraform-aws-icon-peering": "https://github.com/insight-infrastructure/terraform-aws-icon-peering",
+    "modules/terraform-aws-peering-main": "https://github.com/insight-infrastructure/terraform-aws-peering-main",
+    "modules/terraform-aws-icon-dns-setup": "https://github.com/insight-infrastructure/terraform-aws-icon-dns-setup",
+    "modules/terraform-aws-icon-consul-dns": "https://github.com/insight-infrastructure/terraform-aws-icon-consul-dns",
+    "modules/terraform-aws-icon-ingress-dns": "https://github.com/insight-infrastructure/terraform-aws-icon-ingress-dns",
+    "modules/terraform-aws-packer-ami": "https://github.com/insight-infrastructure/terraform-aws-packer-ami"
+  }
+}
