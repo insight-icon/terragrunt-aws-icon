@@ -45,6 +45,22 @@ class Meta(object):
     def status_all(self):
         self.run_all_metas('meta git status -u .')
 
+    def branch_all(self, branch):
+        self.run_all_metas('meta git branch -b %s' % branch)
+
+    def add_all(self):
+        self.run_all_metas('meta git add * .*')
+
+    def commit_all(self, message=''):
+        if not message:
+            raise ValueError('Need to supply a message to commit')
+        self.run_all_metas('meta git commit -m "%s"' % message)
+
+    def push_all(self, branch=''):
+        if not branch:
+            raise ValueError('Need to supply a message to commit')
+        self.run_all_metas('meta git push origin %s' % branch)
+
 
 if __name__ == '__main__':
     fire.Fire(Meta(), name='Meta')
