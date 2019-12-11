@@ -3,6 +3,12 @@ variable "bucket" {
   default = ""
 }
 
+variable "network_name" {
+  type = string
+  default = "testnet"
+}
+
+
 // ------------------Registration
 
 variable "organization_name" {
@@ -85,11 +91,10 @@ variable "region" {
   type = string
   default = ""
 }
-variable "p2p_ip" {
+variable "ip" {
   type = string
   default = ""
 }
-  default = ""
 
 //------------------
 

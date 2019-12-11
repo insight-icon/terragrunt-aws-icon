@@ -23,6 +23,6 @@
       "city":  "${region}"
     },
     "server_type": "${server_type}",
-    "api_endpoint": "${p2p_ip}:9000"
+    "api_endpoint": "${ip}:9000"
   }
 }
