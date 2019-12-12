@@ -1,0 +1,3 @@
+group: prep
+network_name: testnet
+image_id: "iconloop/prep-node:1911121115x323d60-dev"

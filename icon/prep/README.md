@@ -1,0 +1,21 @@
+
+# ICON P-Rep Configurations 
+
+We are continuously evolving our P-Rep deployment as the protocols mature.  Currently we are in phase 1 of the netowkr where only one IP address is allowed to be whitelisted which prevents us from putting the P-Rep in a private subnet / using a load balancer in front of it with a sentry layer. Work was started on this though and hence there are multiple different node deployments in active development. They are:
+
+### Phase 1
+- `prep-module`
+	- A single module deployment that is capable of being run directly from terraform with out terragrunt
+	- Deploys into default VPC 
+- `prep-basic`
+	- A 1 to 1 module approach that deploys to a custom VPC 
+- `prep-citizen`
+	- Same as the basic with a citizen node to offload API load 
+- `prep-ha`
+	- HA setup with two nodes in a Active / Passive pattern deployed with Pacemaker 
+	
+## Phase 2 / 3
+- `prep-ha-sentry`
+	- Same as prep-ha but with a sentry layer in front of it 
+
+

@@ -1,0 +1,13 @@
+.idea
+
+*.tfstate/
+*.tfstate.backup
+*.tfplan
+
+.terragrunt-cache/
+.terraform/
+
+secrets.yaml
+
+/ansible/
+/packer/
