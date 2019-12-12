@@ -11,7 +11,6 @@ locals {
   repo_name = "terraform-aws-icon-prep-basic"
   repo_version = "master"
   repo_path = ""
-
   local_source = false
   modules_path = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("modules")}"
 

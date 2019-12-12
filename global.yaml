@@ -1,2 +1,12 @@
 domain_name: dev.insight-icon.net
 private_tld: icon.internal
+
+network_name: testnet
+
+# These enable the seucrity group settings and later will enable the deployment of specific services
+vault_enabled: true
+bastion_enabled: false
+monitoring_enabled: true
+hids_enabled: true
+logging_enabled: true
+consul_enabled: true
