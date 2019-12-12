@@ -7,7 +7,7 @@ include {
 }
 
 locals {
-  global_vars = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("globals.yaml")}"))
+  global_vars = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("global.yaml")}"))
 }
 
 inputs = {
