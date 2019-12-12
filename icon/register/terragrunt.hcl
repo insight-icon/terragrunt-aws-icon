@@ -8,32 +8,22 @@ include {
 
 locals {
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
-//  eip = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("eip")}"
 }
 
-//dependencies {
-//  paths = [local.eip]
-//}
-//
-//dependency "eip" {
-//  config_path = local.eip
-//}
-
 inputs = {
-//  ip = dependency.eip.outputs.public_ip
-
-  // Path needs to be filled in otherwise registration doesn't work
+// Path needs to be filled in otherwise registration doesn't work
 //  keystore_path = ""
   keystore_path = local.secrets["keystore_path"]
 
-  // If you leave these commented out, you will be prompted for password each time
+// If you leave these commented out, you will be prompted for password each time
 //  keystore_password = ""
   keystore_password = local.secrets["keystore_password"]
 
-  // If you have already registered an IP, you can fill this in and a new IP will not be provisioned
+// If you have already registered an IP, you can fill this in and a new IP will not be provisioned
   ip = ""
 
-  // This MUST be set right from the get go.  If you do this wrong for main, you will have to switch wallet most likely (untested)
+// This MUST be set right from the get go. Options are `mainnet` or `testnet`
+//  If you do this wrong for main, you will have to switch wallet most likely (untested)
   network_name = "testnet"
 
   // These five values are mandatory
@@ -45,12 +35,12 @@ inputs = {
 
   // ------------------Details
 
-  // All the logos are complete paths to the image on the local drive
+// All the logos are complete paths to the image on your local drive
   logo_256 = ""
   logo_1024 = ""
   logo_svg = ""
 
-  // All of this is optional
+// All of this is optional
   steamit = ""
   twitter = ""
   youtube = ""
