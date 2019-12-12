@@ -6,6 +6,8 @@ This module helps with registering a node on the ICON Blockchain. It does three 
 - Puts the necessary details.json file in a bucket publicly accessible 
 - Outputs the commands you need to run in preptools 
 
+**Make sure you have 2000 ICX registration fee in your wallet for mainnet and you have testnet tokens for testnet** 
+
 Future versions will run preptools automatically and will be idempotent (ie can run as many times as you want without breaking things). 
 
 ## Using this module 
