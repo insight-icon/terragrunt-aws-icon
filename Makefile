@@ -3,6 +3,8 @@ SHELL := /usr/bin/env bash
 .PHONY: help
 help:
 	@echo 'Usage:'
+	@echo '    install-ubuntu 		Install basics to run node on mac - developers should do it manually'
+	@echo '    install-mac 			Install basics to run node on ubuntu - developers should do it manually'
 	@echo '    eip-register 		Register a wallet with an ICON network'
 	@echo '    apply-prep-module 	Deploy a P-Rep node on ICON'
 	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
@@ -18,6 +20,13 @@ help:
 	@echo '    make push-all 							Pushes all the sub repos'
 
 
+.PHONY: install-ubuntu
+install-ubuntu:
+	./scripts/install-deps-ubuntu.sh
+
+.PHONY: install-mac
+install-mac:
+	./scripts/install-deps-brew.sh
 
 .PHONY: eip-register
 eip-register:
