@@ -6,7 +6,8 @@ help:
 	@echo '    eip-register 		Register a wallet with an ICON network'
 	@echo '    apply-prep-module 	Deploy a P-Rep node on ICON'
 	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
-
+	@echo '    apply-prep-module 	Destroy the a P-Rep node on ICON'
+	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
 	@echo '    WARNING - git actions are still a WIP - PR welcome!'
 	@echo '    make clone-all   						Clones all the sub repos'
 	@echo '    make pull-all   							Stashes, then pulls, stash apply on all the sub repos'
@@ -16,10 +17,11 @@ help:
 	@echo '    make m="<your commit message" commit-all Clones all the sub repos'
 	@echo '    make push-all 							Pushes all the sub repos'
 
+
+
 .PHONY: eip-register
 eip-register:
 	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/register
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/eip
 
 .PHONY: apply-prep-module
 apply-prep-module:
@@ -30,12 +32,14 @@ destroy-prep-module:
 	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/prep/prep-module
 
 .PHONY: apply-prep-basic
-deploy-prep:
+apply-prep-basic deploy-prep:
 	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-basic
 
 .PHONY: destroy-prep-basic
 destroy-prep-basic:
 	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/prep/prep-basic
+
+
 
 .PHONY: clone-all
 clone-all:

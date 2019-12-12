@@ -11,13 +11,15 @@ account.tfvars
 private.tfvars
 secrets.yaml
 
-packer
-ansible
+packer/
+ansible/
 modules
 
-/us-east-1/main/
-/us-east-1/services/k8s
-/us-east-1/suppport/
-/us-east-1/services
-/us-east-1/mgmt
-
+#icon/bastion
+#icon/consul
+#icon/hids
+#icon/k8s
+#icon/logging
+#icon/monitoring
+#icon/prep
+#icon/vault
