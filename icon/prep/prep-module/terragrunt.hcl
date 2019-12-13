@@ -1,5 +1,6 @@
 terraform {
-  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=master"}
+  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=master"
+}
 
 include {
   path = find_in_parent_folders()
@@ -26,7 +27,7 @@ dependency "eip" {
 // ######################
 
 inputs = {
-  name = local.group_vars["group"]
+  name = "prep-module"
 
   monitoring = true
 
@@ -37,7 +38,7 @@ inputs = {
   ebs_volume_size = 150
   root_volume_size = 25
 
-  instance_type = "m5.xlarge"
+  instance_type = "m5.large"
   volume_path = "/dev/xvdf"
 
   public_key_path = local.secrets["local_public_key"]

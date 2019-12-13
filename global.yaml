@@ -1,11 +1,18 @@
-environment: dev
+#
+#   This is the most important thing to get right
+#
+# The name of the network to deploy into - Options are "testnet" or "mainnet"
+network_name: ""  # You must fill this in
 
+
+# Don't worry about the rest of this for a basic node deployment
 domain_name: dev.insight-icon.net
 private_tld: icon.internal
 
-network_name: testnet
+environment: dev
 
 # These enable the seucrity group settings and later will enable the deployment of specific services
+# When bastion is enabled, you do not get public ssh access
 vault_enabled: true
 bastion_enabled: false
 monitoring_enabled: true

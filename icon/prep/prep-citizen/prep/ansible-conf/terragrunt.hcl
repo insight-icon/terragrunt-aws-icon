@@ -54,7 +54,6 @@ inputs = {
     "keystore_path" : local.secrets["keystore_path"]
     "keystore_password": local.secrets["keystore_password"]
     "network_name": local.global_vars["network_name"]
-//    "image": local.group_vars["image_id"]
     "main_ip": dependency.eip.outputs.public_ip
   }
 }

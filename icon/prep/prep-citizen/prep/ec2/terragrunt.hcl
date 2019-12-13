@@ -57,20 +57,14 @@ inputs = {
   ebs_volume_size = 300
   root_volume_size = 25
 
-  instance_type = "m4.xlarge"
+  instance_type = "m5.xlarge"
   volume_path = "/dev/xvdf"
 
   subnet_id = dependency.vpc.outputs.public_subnets[0]
-
   user_data = dependency.user_data.outputs.user_data
-
   ami_id = dependency.ami.outputs.ami_id
-
   local_public_key = local.secrets["local_public_key"]
-
   security_groups = [dependency.sg.outputs.this_security_group_id]
-
-//  instance_profile_id = dependency.iam.outputs.instance_profile_id
 
   tags = {
     Network = "MainNet"

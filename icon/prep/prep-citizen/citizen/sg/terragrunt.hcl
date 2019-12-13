@@ -50,19 +50,12 @@ inputs = {
       cidr_blocks = local.corporate_ip == "" ? "0.0.0.0/0" : "${local.corporate_ip}/32"
     },
     {
-      from_port = 7100
-      to_port = 7100
-      protocol = "tcp"
-      description = local.description
-      cidr_blocks = "0.0.0.0/0"
-    },
-    {
       from_port = 9000
       to_port = 9000
       protocol = "tcp"
       description = "Security group json rpc traffic"
       cidr_blocks = "0.0.0.0/0"
-    },
+    }
   ]
 
   tags = {}

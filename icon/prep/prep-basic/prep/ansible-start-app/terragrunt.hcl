@@ -26,7 +26,7 @@ locals {
 }
 
 dependencies {
-  paths = [local.eip_association]
+  paths = [local.eip_association, local.eip]
 }
 
 dependency "eip" {

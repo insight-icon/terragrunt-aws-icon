@@ -3,14 +3,15 @@ SHELL := /usr/bin/env bash
 .PHONY: help
 help:
 	@echo 'Usage:'
-	@echo '    install-ubuntu 		Install basics to run node on mac - developers should do it manually'
-	@echo '    install-mac 			Install basics to run node on ubuntu - developers should do it manually'
-	@echo '    eip-register 		Register a wallet with an ICON network'
-	@echo '    apply-prep-module 	Deploy a P-Rep node on ICON'
-	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
-	@echo '    apply-prep-module 	Destroy the a P-Rep node on ICON'
-	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
-	@echo '    clear-cache			Clear the cache of files left by terragrunt'
+	@echo '    install-ubuntu 				Install basics to run node on mac - developers should do it manually'
+	@echo '    install-mac 					Install basics to run node on ubuntu - developers should do it manually'
+	@echo '    eip-register 				Register a wallet with an ICON network'
+	@echo '    apply-prep-password-prompt 	Deploy a P-Rep node on and be prompted for password'
+	@echo '    apply-prep-module 			Deploy a P-Rep node on ICON'
+	@echo '    destroy-prep-module 			Destroy the a P-Rep node on ICON'
+	@echo '    apply-prep-module 			Destroy the a P-Rep node on ICON'
+	@echo '    destroy-prep-module 			Destroy the a P-Rep node on ICON'
+	@echo '    clear-cache					Clear the cache of files left by terragrunt'
 	@echo '    WARNING - git actions are still a WIP - PR welcome!'
 	@echo '    make clone-all   						Clones all the sub repos'
 	@echo '    make pull-all   							Stashes, then pulls, stash apply on all the sub repos'
@@ -32,6 +33,11 @@ install-mac:
 .PHONY: eip-register
 eip-register:
 	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/register
+
+.PHONY: apply-prep-password-prompt
+apply-prep-password-prompt:
+	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/eip
+	terragrunt apply --terragrunt-source-update --terragrunt-working-dir icon/prep/prep-module
 
 .PHONY: apply-prep-module
 apply-prep-module:

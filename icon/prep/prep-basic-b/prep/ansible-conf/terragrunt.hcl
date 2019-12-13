@@ -25,6 +25,7 @@ locals {
   ansible = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("ansible")}"
   ec2 = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("ec2")}"
   eip = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("eip")}"
+  citizen = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("citizen")}/ec2"
 }
 
 dependencies {
@@ -54,7 +55,7 @@ inputs = {
     "keystore_path" : local.secrets["keystore_path"]
     "keystore_password": local.secrets["keystore_password"]
     "network_name": local.global_vars["network_name"]
-//    "image": local.group_vars["image_id"]
     "main_ip": dependency.eip.outputs.public_ip
+    "citizen_ip": dependency.citizen.outputs.private_ip
   }
 }

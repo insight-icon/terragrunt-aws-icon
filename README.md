@@ -6,36 +6,41 @@ This is the second iteration of an automated deployment for running nodes and su
 
 ## To Use 
 
-1. Export AWS keys to environment variables or profile 
+1. ##### Export AWS keys to environment variables or profile 
 	- Visit [this link](https://www.notion.so/insightbxplanning/AWS-Keys-Tutorial-175fa12e9b5b43509235a97fca275653) for more information 
-2. Install prerequisites 
+2. ##### Install prerequisites 
 	- [Check this section](prerequisites)
-3. Pull in dependencies 
+3. ##### Pull in dependencies 
     - `meta git clone .`
-4. Make sure you have ssh keys
-	- `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f $HOME/.ssh/id_rsa`
+4. ##### Make sure you have ssh keys
+	- `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f $HOME/.ssh/icon_node`
 
-5. Fill in the necessary inputs in config files at base of directory 
+5. #####  Fill in the necessary inputs in config files at base of directory 
 	- There are four file 
 		- `global.yaml` 
-		- `secrets.yaml` 
+		- `secrets.yaml` - 
 		- `account.tfvars`
 		- `region.tfvars`
 	- Two files have examples that you can remove the `.example` file ending to get started 
 
-6. Register node
+	> ### Make sure you choose the right network in the `global.yaml` file. 
+6. ##### Register node
 	- You will need to regster the node.  Check the official docs 
 	- Follow [this readme](icon/register/README.md) and fill in the appropriate information 
 	- `make eip-register` 
 	- Copy output and run in shell 
 	- This is a one time process for most people 
 	
-7. Deploy node
+7. ##### Deploy node
 	- We have several variations of the node deployment in various stages of development.  
 	- Most stable version right now is the prep-module or prep-basic 
-	
+	- You can avoid putting in the password in the `secrets` file for that deployment 
+		- `make apply-prep-password-prompt`
+	- Developers will want to know how to deploy all the pieces individually 
+
+To turn off your node, run:
 ```bash
-make apply-prep-module
+make destroy-prep-module
 ```
 
 ### Areas of Development 
