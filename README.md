@@ -1,34 +1,36 @@
 # terragrunt-aws-icon
----
 
 **Work in progress** - Please get in touch 
 
 This is the second iteration of an automated deployment for running nodes and supporting infrastructure on the ICON Blockchain. 
 
 ## To Use 
----
+
 1. Export AWS keys to environment variables or profile 
 	- Visit [this link](https://www.notion.so/insightbxplanning/AWS-Keys-Tutorial-175fa12e9b5b43509235a97fca275653) for more information 
 2. Install prerequisites 
 	- [Check this section](prerequisites)
 3. Pull in dependencies 
     - `meta git clone .`
-4. Fill in the necessary inputs in config files at base of directory 
+4. Make sure you have ssh keys
+	- `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f $HOME/.ssh/id_rsa`
+
+5. Fill in the necessary inputs in config files at base of directory 
 	- There are four file 
 		- `global.yaml` 
 		- `secrets.yaml` 
 		- `account.tfvars`
 		- `region.tfvars`
-	- Two files have examples that you can remove the `.expample` file ending to get started 
+	- Two files have examples that you can remove the `.example` file ending to get started 
 
-5. Register node
+6. Register node
 	- You will need to regster the node.  Check the official docs 
 	- Follow [this readme](icon/register/README.md) and fill in the appropriate information 
-	- Run from the folder with terragrunt 
+	- `make eip-register` 
 	- Copy output and run in shell 
 	- This is a one time process for most people 
 	
-6. Deploy node
+7. Deploy node
 	- We have several variations of the node deployment in various stages of development.  
 	- Most stable version right now is the prep-module or prep-basic 
 	

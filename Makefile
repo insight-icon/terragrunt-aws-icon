@@ -10,6 +10,7 @@ help:
 	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
 	@echo '    apply-prep-module 	Destroy the a P-Rep node on ICON'
 	@echo '    destroy-prep-module 	Destroy the a P-Rep node on ICON'
+	@echo '    clear-cache			Clear the cache of files left by terragrunt'
 	@echo '    WARNING - git actions are still a WIP - PR welcome!'
 	@echo '    make clone-all   						Clones all the sub repos'
 	@echo '    make pull-all   							Stashes, then pulls, stash apply on all the sub repos'
@@ -48,7 +49,9 @@ apply-prep-basic deploy-prep:
 destroy-prep-basic:
 	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/prep/prep-basic
 
-
+.PHONY: clear-cache
+clear-cache:
+	./scripts/clear-cache.sh
 
 .PHONY: clone-all
 clone-all:
