@@ -18,7 +18,7 @@ This is the second iteration of an automated deployment for running nodes and su
 5. #####  Fill in the necessary inputs in config files at base of directory 
 	- There are four file 
 		- `global.yaml` 
-		- `secrets.yaml` - 
+		- `secrets.yaml`
 		- `account.tfvars`
 		- `region.tfvars`
 	- Two files have examples that you can remove the `.example` file ending to get started 
@@ -34,9 +34,12 @@ This is the second iteration of an automated deployment for running nodes and su
 7. ##### Deploy node
 	- We have several variations of the node deployment in various stages of development.  
 	- Most stable version right now is the prep-module or prep-basic 
-	- You can avoid putting in the password in the `secrets` file for that deployment 
-		- `make apply-prep-password-prompt`
 	- Developers will want to know how to deploy all the pieces individually 
+	- To deploy the most basic version, run:
+
+```
+make apply-prep-module
+```
 
 To turn off your node, run:
 ```bash

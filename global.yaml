@@ -1,9 +1,11 @@
 #
-#   This is the most important thing to get right
+#     This is the most important thing to get right
 #
 # The name of the network to deploy into - Options are "testnet" or "mainnet"
-network_name: ""  # You must fill this in
-
+network_name: "test"  # You must fill this in
+#
+#     Do not register on the wrong network
+#
 
 # Don't worry about the rest of this for a basic node deployment
 domain_name: dev.insight-icon.net
