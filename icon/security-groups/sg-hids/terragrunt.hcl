@@ -12,14 +12,21 @@ locals {
 
   # Dependencies
   vpc = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("vpc")}"
+  label = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("label")}"
+
+  name = "hids"
 }
 
 dependencies {
-  paths = compact([local.vpc, local.global_vars["bastion_enabled"] ? "../sg-bastion" : "", local.global_vars["consul_enabled"] ? "../sg-consul" : "", local.global_vars["monitoring_enabled"] ? "../sg-monitoring" : ""])
+  paths = compact([local.vpc, local.label, local.global_vars["bastion_enabled"] ? "../sg-bastion" : "", local.global_vars["consul_enabled"] ? "../sg-consul" : "", local.global_vars["monitoring_enabled"] ? "../sg-monitoring" : ""])
 }
 
 dependency "vpc" {
   config_path = local.vpc
+}
+
+dependency "label" {
+  config_path = local.label
 }
 
 dependency "bastion_sg" {
@@ -33,11 +40,11 @@ dependency "monitoring_sg" {
 }
 
 inputs = {
-  name = "hids"
+  name = local.name
   description = "All traffic"
-//  create = local.global_vars["hids_enabled"]
 
   vpc_id = dependency.vpc.outputs.vpc_id
+  tags = merge({Name: local.name}, dependency.label.outputs.tags)
 
   ingress_with_cidr_blocks = [{
     from_port = 80
@@ -76,6 +83,4 @@ inputs = {
 
   ingress_cidr_blocks = local.global_vars["consul_enabled"] ? [dependency.vpc.outputs.vpc_cidr_block] : []
   ingress_rules = local.global_vars["consul_enabled"] ? ["consul-tcp", "consul-serf-wan-tcp", "consul-serf-wan-udp", "consul-serf-lan-tcp", "consul-serf-lan-udp", "consul-dns-tcp", "consul-dns-udp"] : []
-
-  tags = {}
 }

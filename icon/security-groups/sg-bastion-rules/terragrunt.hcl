@@ -15,7 +15,7 @@ locals {
 }
 
 dependencies {
-  paths = compact([local.vpc, local.global_vars["bastion_enabled"] ? "../sg-bastion" : "", local.global_vars["consul_enabled"] ? "../sg-consul" : "", local.global_vars["monitoring_enabled"] ? "../sg-monitoring" : ""])
+  paths = compact([local.global_vars["bastion_enabled"] ? "../sg-bastion" : "", local.global_vars["consul_enabled"] ? "../sg-consul" : "", local.global_vars["monitoring_enabled"] ? "../sg-monitoring" : ""])
 }
 
 dependency "vpc" {
@@ -35,8 +35,6 @@ dependency "bastion_sg" {
 inputs = {
   name = "bastion"
   description = "All traffic"
-//  create = local.global_vars["bastion_enabled"]
-
   security_group_id = local.global_vars["bastion_enabled"] ? dependency.bastion_sg.outputs.this_security_group_id : ""
 
   vpc_id = dependency.vpc.outputs.vpc_id
@@ -62,6 +60,4 @@ inputs = {
     description = "Nordstrom/ssh_exporter"
     source_security_group_id = dependency.monitoring_sg.outputs.this_security_group_id
   }] : []
-
-  tags = {}
 }

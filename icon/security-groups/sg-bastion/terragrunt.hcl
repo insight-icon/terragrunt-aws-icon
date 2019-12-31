@@ -12,21 +12,27 @@ locals {
 
   # Dependencies
   vpc = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("vpc")}"
+  label = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("label")}"
+
+  name = "bastion"
 }
 
 dependencies {
-  paths = [local.vpc]
+  paths = [local.vpc, local.label]
 }
 
 dependency "vpc" {
   config_path = local.vpc
 }
 
+dependency "label" {
+  config_path = local.label
+}
+
 inputs = {
-  name = "bastion"
+  name = local.name
   description = "All traffic"
-//  create = local.global_vars["bastion_enabled"]
 
   vpc_id = dependency.vpc.outputs.vpc_id
-  tags = {}
+  tags = merge({Name: local.name}, dependency.label.outputs.tags)
 }
