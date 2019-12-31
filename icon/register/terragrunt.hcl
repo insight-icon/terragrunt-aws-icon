@@ -8,6 +8,15 @@ include {
 
 locals {
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
+  label = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("label")}"
+}
+
+dependencies {
+  paths = [local.label]
+}
+
+dependency "label" {
+  config_path = local.label
 }
 
 inputs = {
@@ -20,7 +29,7 @@ inputs = {
   keystore_password = local.secrets["keystore_password"]
 
 // If you have already registered an IP, you can fill this in and a new IP will not be provisioned
-  ip = ""
+  ip = "1.2.3.4"
 
 // This MUST be set right from the get go. Options are `mainnet` or `testnet`
 //  If you do this wrong for main, you will have to switch wallet most likely (untested)
@@ -53,4 +62,7 @@ inputs = {
   server_type = ""
   region = ""
   region = ""
+
+//  Do not change this
+  tags = dependency.label.outputs.tags
 }

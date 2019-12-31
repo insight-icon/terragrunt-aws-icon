@@ -8,18 +8,14 @@ locals {
   url = var.network_name == "testnet" ? "https://zicon.net.solidwallet.io" : "https://ctz.solidwallet.io/api/v3"
 
   ip = var.ip == "" ? aws_eip.this.*.public_ip[0] : var.ip
+
+  tags = merge(var.tags, {"Name" = "${var.network_name}-ip"})
 }
 
 resource "aws_eip" "this" {
-  count = var.ip == "" ? 1 : 0
-
+  count = var.ip == null ? 1 : 0
   vpc = true
-
-  tags = {
-    Name = "icon"
-    Region = data.aws_region.this.name
-    NetworkName = var.network_name
-  }
+  tags = var.tags
 
   lifecycle {
     prevent_destroy = false
@@ -57,6 +53,26 @@ resource "aws_s3_bucket" "bucket" {
 EOF
 }
 
+resource "aws_s3_bucket_object" "logo_256" {
+  count = var.logo_256 == "" ? 0 : 1
+  bucket = aws_s3_bucket.bucket.bucket
+  key = basename(var.logo_256)
+  source = var.logo_256
+}
+
+resource "aws_s3_bucket_object" "logo_1024" {
+  count = var.logo_1024 == "" ? 0 : 1
+  bucket = aws_s3_bucket.bucket.bucket
+  key = basename(var.logo_1024)
+  source = var.logo_1024
+}
+
+resource "aws_s3_bucket_object" "logo_svg" {
+  count = var.logo_svg == "" ? 0 : 1
+  bucket = aws_s3_bucket.bucket.bucket
+  key = basename(var.logo_svg)
+  source = var.logo_svg
+}
 data "template_file" "details" {
   template = file("${path.module}/details.json")
   vars = {
@@ -104,29 +120,29 @@ resource "aws_s3_bucket_object" "details" {
 }
 
 //resource "null_resource" "registration" {
-////  provisioner "local-exec" {
-////    command = <<-EOF
-////echo "Y" | preptools registerPRep \
-////--url ${local.url} \
-////--nid ${local.nid} \
-////%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
-////%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
-////%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
-////%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
-////%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
-////%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
-////%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
-////--details http://${aws_s3_bucket.bucket.website_endpoint}/details.json \
-////--p2p-endpoint "${local.ip}:7100"
-////EOF
-////  }
-////
-////  triggers = {
-////    build_number = timestamp()
-////  }
-////}
+//  provisioner "local-exec" {
+//    command = <<-EOF
+//echo "Y" | preptools registerPRep \
+//--url ${local.url} \
+//--nid ${local.nid} \
+//%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
+//%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
+//%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
+//%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
+//%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
+//%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
+//%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
+//--details http://${aws_s3_bucket.bucket.website_endpoint}/details.json \
+//--p2p-endpoint "${local.ip}:7100"
+//EOF
+//  }
+//
+//  triggers = {
+//    build_number = timestamp()
+//  }
+//}
 
-// TTD build logic to handle setPRep
+//// TTD build logic to handle setPRep
 //resource "null_resource" "update_registration" {
 //  provisioner "local-exec" {
 //    command = <<-EOF

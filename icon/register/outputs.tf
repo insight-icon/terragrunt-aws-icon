@@ -11,7 +11,11 @@ output "registration_json" {
 }
 
 output "ip" {
-  value = var.ip == "" ? concat(aws_eip.this.*.public_ip, [""])[0] : var.ip
+  value = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
+}
+
+output "public_ip" {
+  value = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
 }
 
 output "network_name" {

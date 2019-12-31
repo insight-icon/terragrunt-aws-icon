@@ -5,9 +5,11 @@ variable "bucket" {
 
 variable "network_name" {
   type = string
-  default = "testnet"
 }
 
+variable "tags" {
+  type = map(string)
+}
 
 // ------------------Registration
 
@@ -91,9 +93,10 @@ variable "region" {
   type = string
   default = ""
 }
+
 variable "ip" {
   type = string
-  default = ""
+  default = null
 }
 
 //------------------
