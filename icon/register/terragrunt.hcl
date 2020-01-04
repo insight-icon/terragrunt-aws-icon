@@ -28,15 +28,16 @@ inputs = {
 //  keystore_password = ""
   keystore_password = local.secrets["keystore_password"]
 
-// If you have already registered an IP, you can fill this in and a new IP will not be provisioned
-  ip = "1.2.3.4"
+// If you have already have an IP, you can enter it here / uncomment and a new IP will not be provisioned with the
+// existing IP being brought
+//  ip = "1.2.3.4"
 
 // This MUST be set right from the get go. Options are `mainnet` or `testnet`
 //  If you do this wrong for main, you will have to switch wallet most likely (untested)
   network_name = "testnet"
 
   // These five values are mandatory
-  organization_name = "Insight-C2"
+  organization_name = "Insight-C3"
   organization_country = "USA"
   organization_email = "insight.icon.prep@gmail.com"
   organization_city = "San Francisco"

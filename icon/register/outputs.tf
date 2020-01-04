@@ -6,9 +6,9 @@ output "details_values" {
   value = data.template_file.details.rendered
 }
 
-output "registration_json" {
-  value = data.template_file.registration.rendered
-}
+//output "registration_json" {
+//  value = data.template_file.registration.rendered
+//}
 
 output "ip" {
   value = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip

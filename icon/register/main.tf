@@ -7,7 +7,7 @@ locals {
   nid = var.network_name == "testnet" ? 2 : 1
   url = var.network_name == "testnet" ? "https://zicon.net.solidwallet.io" : "https://ctz.solidwallet.io/api/v3"
 
-  ip = var.ip == "" ? aws_eip.this.*.public_ip[0] : var.ip
+  ip = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
 
   tags = merge(var.tags, {"Name" = "${var.network_name}-ip"})
 }
@@ -140,6 +140,8 @@ resource "aws_s3_bucket_object" "details" {
 //  triggers = {
 //    build_number = timestamp()
 //  }
+//
+//  depends_on = [aws_s3_bucket_object.details]
 //}
 
 //// TTD build logic to handle setPRep
