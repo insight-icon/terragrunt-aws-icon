@@ -2,22 +2,31 @@
 #     This is the most important thing to get right
 #
 # The name of the network to deploy into - Options are "testnet" or "mainnet"
-network_name: "test"  # You must fill this in
+network_name: "testnet"  # You must fill this in
 #
 #     Do not register on the wrong network
 #
+
+# These can change to your liking
+namespace: icon
+environment: dev
+owner: insight
+
+# Need to specify 3 availablilty zones here and also the region in region.tfvars
+azs:
+  - us-east-2a
+  - us-east-2b
+  - us-east-2c
 
 # Don't worry about the rest of this for a basic node deployment
 domain_name: dev.insight-icon.net
 private_tld: icon.internal
 
-environment: dev
-
-# These enable the seucrity group settings and later will enable the deployment of specific services
+# These enable the security group settings and later will enable the deployment of specific services
 # When bastion is enabled, you do not get public ssh access
-vault_enabled: true
+vault_enabled: false
 bastion_enabled: false
-monitoring_enabled: true
-hids_enabled: true
-logging_enabled: true
-consul_enabled: true
+monitoring_enabled: false
+hids_enabled: false
+logging_enabled: false
+consul_enabled: false
