@@ -77,7 +77,7 @@ apply-prep-module-vpc:
 
 .PHONY: destroy-prep-module-vpc
 destroy-prep-module-vpc:
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/prep/prep-module-vpc
+	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
 
 ######################
 # git actions - WIP!!!

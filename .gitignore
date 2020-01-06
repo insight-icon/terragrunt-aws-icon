@@ -8,8 +8,10 @@
 .terraform/
 
 account.tfvars
-private.tfvars
 secrets.yaml
+
+!{{cookiecutter.environment}}/account.tfvars
+!{{cookiecutter.environment}}/secrets.yaml
 
 packer/
 ansible/
