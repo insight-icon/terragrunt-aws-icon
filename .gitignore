@@ -15,6 +15,11 @@ packer/
 ansible/
 modules
 
+experiment
+
+notes.md
+
+
 #icon/bastion
 #icon/consul
 #icon/hids

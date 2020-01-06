@@ -9,7 +9,7 @@ This is the second iteration of an automated deployment for running nodes and su
 1. ##### Export AWS keys to environment variables or profile 
 	- Visit [this link](https://www.notion.so/insightbxplanning/AWS-Keys-Tutorial-175fa12e9b5b43509235a97fca275653) for more information 
 2. ##### Install prerequisites 
-	- [Check this section](prerequisites)
+	- [Check this section](#prerequisites)
 3. ##### Pull in dependencies 
     - `meta git clone .`
 4. ##### Make sure you have ssh keys
@@ -61,7 +61,10 @@ Get in touch with Rob if you want to help / need a walk through of the repo.
 
 ### Prerequisites
 ---
-The deployment works on both Linux and Mac. 
+The deployment works on both Linux and Mac. For windows you will want to install Ubuntu WSL.  
+- To install dependencies, first try the Makefile
+    - Mac - Have brew installed then `make install-deps-mac` from the root of repo 
+    - Ubuntu - `make install-deps-ubuntu`
 - Visit [this link](https://www.notion.so/insightbxplanning/Installing-Prerequisites-0def287ace304b4b98326b743f88d30b) for more information 
 - Here are most of the programs - may be some dependencies of these missing, hence check link above. 
 	- nodejs 
