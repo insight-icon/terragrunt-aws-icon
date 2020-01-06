@@ -37,13 +37,13 @@ inputs = {
   network_name = "testnet"
 
   // These five values are mandatory
-  organization_name = "Insight-C3"
+  organization_name = "Insight-TN4C4"
   organization_country = "USA"
   organization_email = "insight.icon.prep@gmail.com"
   organization_city = "San Francisco"
-  organization_website = "insight-icon.net"
+  organization_website = "http://insight-icon.net"
 
-  // ------------------Details
+  // ------------------Detailstg
 
 // All the logos are complete paths to the image on your local drive
   logo_256 = ""

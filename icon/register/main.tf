@@ -4,7 +4,7 @@ data "aws_region" "this" {}
 locals {
   region = var.region == "" ? data.aws_region.this.name : var.region
   bucket = var.bucket == "" ? "prep-registration-${random_pet.this.id}" : var.bucket
-  nid = var.network_name == "testnet" ? 2 : 1
+  nid = var.network_name == "testnet" ? 80 : 1
   url = var.network_name == "testnet" ? "https://zicon.net.solidwallet.io" : "https://ctz.solidwallet.io/api/v3"
 
   ip = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
@@ -53,6 +53,9 @@ resource "aws_s3_bucket" "bucket" {
 EOF
 }
 
+########
+# Images
+########
 resource "aws_s3_bucket_object" "logo_256" {
   count = var.logo_256 == "" ? 0 : 1
   bucket = aws_s3_bucket.bucket.bucket
@@ -67,14 +70,18 @@ resource "aws_s3_bucket_object" "logo_1024" {
   source = var.logo_1024
 }
 
-resource "aws_s3_bucket_object" "logo_svg" {
+resource aws_s3_bucket_object "logo_svg" {
   count = var.logo_svg == "" ? 0 : 1
   bucket = aws_s3_bucket.bucket.bucket
   key = basename(var.logo_svg)
   source = var.logo_svg
 }
-data "template_file" "details" {
-  template = file("${path.module}/details.json")
+
+###########
+# Templates
+###########
+resource template_file "details" {
+  template = file("${path.module}/templates/details.json")
   vars = {
     logo_256 = var.logo_256
     logo_1024 = var.logo_1024
@@ -97,8 +104,8 @@ data "template_file" "details" {
   }
 }
 
-data "template_file" "registration" {
-  template = file("${path.module}/registerPRep.json")
+resource "template_file" "registration" {
+  template = file("${path.module}/templates/registerPRep.json")
   vars = {
     name = var.organization_name
     country = var.organization_country
@@ -113,57 +120,128 @@ data "template_file" "registration" {
   depends_on = [aws_s3_bucket.bucket]
 }
 
+resource template_file "preptools_config" {
+  template = file("${path.module}/templates/preptools_config.json")
+  vars = {
+    nid = local.nid
+    url = local.url
+    keystore_path = var.keystore_path
+  }
+  depends_on = [aws_s3_bucket.bucket]
+}
+
+#################
+# Persist objects
+#################
+resource "null_resource" "write_cfgs" {
+  provisioner "local-exec" {
+    command = <<-EOF
+echo '${template_file.preptools_config.rendered}' > ${path.module}/preptools_config.json
+echo '${template_file.registration.rendered}' > ${path.module}/registerPRep.json
+EOF
+  }
+}
+
 resource "aws_s3_bucket_object" "details" {
   bucket = aws_s3_bucket.bucket.bucket
   key    = "details.json"
-  content = data.template_file.details.rendered
+  content = template_file.details.rendered
 }
 
-//resource "null_resource" "registration" {
+##########
+# Register
+##########
+// We need a way to store state of the registration in S3. If you register twice an error will pop up.
+// We can surpress that error but then we can't conditionally make a resource that updates an object to track state of registration
+// Instead we need to do it all with login in the null resource provision that first reads the object and whether it is true or not,
+// call the register function to
+
+resource aws_s3_bucket_object "register_bool" {
+  bucket = aws_s3_bucket.bucket.bucket
+  key = "register_bool"
+}
+
+data aws_s3_bucket_object "register_bool" {
+  bucket = aws_s3_bucket.bucket.bucket
+  key = "register_bool"
+  depends_on = [aws_s3_bucket_object.register_bool]
+}
+
+//resource "null_resource" "registerPRep" {
+//  count = data.aws_s3_bucket_object.register_bool.body == null ? 1 : 0
+//
 //  provisioner "local-exec" {
 //    command = <<-EOF
-//echo "Y" | preptools registerPRep \
-//--url ${local.url} \
-//--nid ${local.nid} \
-//%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
-//%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
-//%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
-//%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
-//%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
-//%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
-//%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
-//--details http://${aws_s3_bucket.bucket.website_endpoint}/details.json \
-//--p2p-endpoint "${local.ip}:7100"
+//echo "Y" | preptools registerPRep --prep-json registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
 //EOF
 //  }
 //
-//  triggers = {
-//    build_number = timestamp()
-//  }
-//
-//  depends_on = [aws_s3_bucket_object.details]
+//  depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
 //}
 
-//// TTD build logic to handle setPRep
-//resource "null_resource" "update_registration" {
+resource null_resource "registerPRep" {
+  provisioner "local-exec" {
+    command = <<-EOF
+#!/bin/bash
+aws s3api get-object --bucket ${aws_s3_bucket.bucket.bucket} --key ${aws_s3_bucket_object.register_bool.key} ${path.module}/register_bool
+register_state=`cat ${path.module}/register_bool`
+if [ -z $register_state ]; then
+  echo "Y" | preptools registerPRep --prep-json ${path.module}/registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
+else
+  echo "already registered"
+fi
+EOF
+  }
+// Run this every time with logic trigger in call to see if the object has a true value in it
+  triggers = {
+    build_always = timestamp()
+  }
+
+  depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
+}
+
+resource "aws_s3_bucket_object" "register_bool_true" {
+  bucket = aws_s3_bucket.bucket.bucket
+  key = "register_bool"
+  content = "true"
+  depends_on = [null_resource.registerPRep]
+}
+
+##########
+# set prep
+##########
+
+resource null_resource "setPRep" {
+// This logic is broken.  We need another parameter to skip this step on first run
+// Perhaps put a variable in an object setting the count of runs and only run this when count is >1
+// Logic already in for if any resource changes, run set prep
 //  provisioner "local-exec" {
 //    command = <<-EOF
-//echo "Y" | preptools setPRep \
-//--url ${local.url} \
-//--nid ${local.nid} \
-//%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
-//%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
-//%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
-//%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
-//%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
-//%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
-//%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
-//--details ${aws_s3_bucket.bucket.bucket_regional_domain_name}/details.json \
-//--p2p-endpoint "${local.ip}:7100"
+//#!/bin/bash
+//aws s3api get-object --bucket ${aws_s3_bucket.bucket.bucket} --key ${aws_s3_bucket_object.register_bool.key} ${path.module}/register_bool
+//register_state=`cat ${path.module}/register_bool`
+//if [ -z $register_state ]; then
+//  echo "Should not see this output ever - broken logic"
+//else
+//  echo "Setting prep"
+//fi
 //EOF
-//  }
-//
-//  triggers = {
-//    build_number = timestamp()
-//  }
 //}
+
+  provisioner "local-exec" {
+    command = <<-EOF
+#!/bin/bash
+echo "Y" | preptools setPRep --prep-json ${path.module}/registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
+EOF
+  }
+
+//  This makes the resource run when any of these change
+  triggers = {
+    details = template_file.details.rendered
+    register = template_file.registration.rendered
+    ip = var.ip == "" ? aws_eip.this.*.public_ip[0] : var.ip
+  }
+
+  depends_on = [aws_s3_bucket_object.register_bool_true]
+}
+
