@@ -1,25 +1,28 @@
 .idea
 
+# Terraform and terragrunt
 *.tfstate/
 *.tfstate.backup
 *.tfplan
-
 .terragrunt-cache/
 .terraform/
 
-Pipfile.lock
-
+# Sensitive config files
 account.tfvars
-private.tfvars
 secrets.yaml
 
+# Other
+experiment
+notes.md
+Pipfile.lock
+
+# Cookiecutter
+config.yaml
+
+# meta
 packer/
 ansible/
-modules
-
-experiment
-
-notes.md
+modules/
 
 
 #icon/bastion
