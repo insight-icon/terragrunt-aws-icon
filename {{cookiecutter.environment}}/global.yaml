@@ -1,0 +1,32 @@
+#
+#     This is the most important thing to get right
+#
+# The name of the network to deploy into - Options are "testnet" or "mainnet"
+network_name: {{ cookiecutter.network_name }}  # You must fill this in
+#
+#     Do not register on the wrong network
+#
+
+# These can change to your liking
+namespace: {{ cookiecutter.namespace }}
+environment: {{ cookiecutter.environment }}
+owner: {{ cookiecutter.owner }}
+
+# Need to specify 3 availablilty zones here and also the region in region.tfvars
+azs:
+  - {{ cookiecutter.region }}a
+  - {{ cookiecutter.region }}b
+  - {{ cookiecutter.region }}c
+
+# Don't worry about the rest of this for a basic node deployment
+domain_name: dev.insight-icon.net
+private_tld: icon.internal
+
+# These enable the security group settings and later will enable the deployment of specific services
+# When bastion is enabled, you do not get public ssh access
+vault_enabled: false
+bastion_enabled: false
+monitoring_enabled: false
+hids_enabled: false
+logging_enabled: false
+consul_enabled: false

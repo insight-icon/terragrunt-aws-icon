@@ -1,0 +1,13 @@
+{
+  "network_name": ["testnet", "mainnet"],
+  "region": "us-east-1",
+  "account_id": "123456789012",
+  "namespace": "icon",
+  "environment": "prod",
+  "owner": "insight",
+  "local_public_key": "/home/<user>/.ssh/id_rsa.pub",
+  "local_private_key": "/home/<user>/.ssh/id_rsa",
+  "corporate_ip": "1.2.3.4",
+  "keystore_path": "/home/<user>/keystore",
+  "keystore_password": "your password"
+}
