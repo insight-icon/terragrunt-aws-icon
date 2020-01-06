@@ -37,11 +37,11 @@ inputs = {
   network_name = "testnet"
 
   // These five values are mandatory
-  organization_name = "Insight-C3"
+  organization_name = "Insight-C6"
   organization_country = "USA"
   organization_email = "insight.icon.prep@gmail.com"
   organization_city = "San Francisco"
-  organization_website = "insight-icon.net"
+  organization_website = "https://insight-icon.net"
 
   // ------------------Details
 
