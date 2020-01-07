@@ -2,7 +2,7 @@
 #     This is the most important thing to get right
 #
 # The name of the network to deploy into - Options are "testnet" or "mainnet"
-network_name: "testnet"  # You must fill this in
+network_name: testnet  # You must fill this in
 #
 #     Do not register on the wrong network
 #
