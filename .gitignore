@@ -14,16 +14,20 @@ secrets.yaml
 # Other
 experiment
 notes.md
+bu
 Pipfile.lock
 
 # Cookiecutter
 config.yaml
+!{{cookiecutter.environment}}-tmp/account.tfvars
+
 
 # meta
 packer/
 ansible/
 modules/
 
+dev
 
 #icon/bastion
 #icon/consul
