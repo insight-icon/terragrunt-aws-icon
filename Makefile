@@ -59,7 +59,7 @@ destroy-prep-module:
 	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
 
 ###########################
-# Single node in custom VPC
+# Single node in custom vpc
 ###########################
 .PHONY: apply-prep-module-vpc
 apply-prep-module-vpc: apply-network
@@ -67,9 +67,6 @@ apply-prep-module-vpc: apply-network
 
 .PHONY: destroy-prep-module-vpc
 destroy-prep-module-vpc:
-<<<<<<< HEAD
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
-=======
 	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc/prep
 	$(MAKE) destroy-network
 
@@ -88,7 +85,6 @@ destroy-network:
 	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/security-groups; \
 	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/network/vpc
 # --exclude-external-dependencies
->>>>>>> template-init
 
 ######################
 # git actions - WIP!!!
