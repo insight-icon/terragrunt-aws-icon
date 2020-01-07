@@ -34,20 +34,48 @@ clear-cache:
 	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \; && \
 	find . -type d -name ".terraform" -prune -exec rm -rf {} \;
 
-############
-# Setup node
-############
-.PHONY: apply-all
-apply-all: eip-register
-
-.PHONY: destroy-all
-destroy-all:
-
+##########
+# Register
+##########
 .PHONY: eip-register
 eip-register:
 	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/label; \
 	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/register
+# For now this outputs the commands you need to run.  There is a branch that runs it automatically
+.PHONY: eip-destroy
+eip-destroy:
+	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/eip
 
+############################
+# Single node in default vpc
+############################
+.PHONY: apply-prep-module
+apply-prep-module:
+	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/eip; \
+	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
+
+.PHONY: destroy-prep-module
+destroy-prep-module:
+	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
+
+###########################
+# Single node in custom VPC
+###########################
+.PHONY: apply-prep-module-vpc
+apply-prep-module-vpc: apply-network
+	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
+
+.PHONY: destroy-prep-module-vpc
+destroy-prep-module-vpc:
+<<<<<<< HEAD
+	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
+=======
+	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc/prep
+	$(MAKE) destroy-network
+
+###############
+# Network setup
+###############
 .PHONY: apply-network
 apply-network:
 	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/label; \
@@ -57,32 +85,14 @@ apply-network:
 
 .PHONY: destroy-network
 destroy-network:
-	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/network/vpc
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/network/security-groups
-
-######
-# prep
-######
-.PHONY: apply-prep-module
-apply-prep-module:
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
-
-.PHONY: destroy-prep-module
-destroy-prep-module:
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-exclude-external-dependencies --terragrunt-working-dir icon/prep/prep-module
-
-.PHONY: apply-prep-module-vpc
-apply-prep-module-vpc:
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
-
-.PHONY: destroy-prep-module-vpc
-destroy-prep-module-vpc:
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
+	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/security-groups; \
+	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/network/vpc
+# --exclude-external-dependencies
+>>>>>>> template-init
 
 ######################
 # git actions - WIP!!!
 ######################
-
 .PHONY: clone-all
 clone-all:
 	meta git clone .; \

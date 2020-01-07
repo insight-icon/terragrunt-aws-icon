@@ -2,21 +2,21 @@
 #     This is the most important thing to get right
 #
 # The name of the network to deploy into - Options are "testnet" or "mainnet"
-network_name: testnet  # You must fill this in
+network_name: {{ cookiecutter.network_name }}  # You must fill this in
 #
 #     Do not register on the wrong network
 #
 
 # These can change to your liking
-namespace: icon
-environment: dev
-owner: insight
+namespace: {{ cookiecutter.namespace }}
+environment: {{ cookiecutter.environment }}
+owner: {{ cookiecutter.owner }}
 
 # Need to specify 3 availablilty zones here and also the region in region.tfvars
 azs:
-  - us-east-2a
-  - us-east-2b
-  - us-east-2c
+  - {{ cookiecutter.region }}a
+  - {{ cookiecutter.region }}b
+  - {{ cookiecutter.region }}c
 
 # Don't worry about the rest of this for a basic node deployment
 domain_name: dev.insight-icon.net

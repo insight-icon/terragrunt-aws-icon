@@ -40,7 +40,7 @@ inputs = {
   ebs_volume_size = 150
   root_volume_size = 25
 
-  instance_type = "m5.large"
+  instance_type = "t3.small"
   volume_path = "/dev/xvdf"
 
   public_key_path = local.secrets["local_public_key"]
