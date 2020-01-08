@@ -21,70 +21,60 @@ help:
 	@echo '    make push-all 							Pushes all the sub repos'
 
 
-.PHONY: install-deps-ubuntu
 install-deps-ubuntu:
 	./scripts/install-deps-ubuntu.sh
 
-.PHONY: install-deps-mac
 install-deps-mac:
 	./scripts/install-deps-brew.sh
 
-.PHONY: clear-cache
 clear-cache:
 	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \; && \
 	find . -type d -name ".terraform" -prune -exec rm -rf {} \;
 
+tg_cmd = terragrunt $(1) --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir $(2)
+
 ##########
 # Register
 ##########
-.PHONY: eip-register
 eip-register:
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/label; \
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/register
-# For now this outputs the commands you need to run.  There is a branch that runs it automatically
-.PHONY: eip-destroy
+	$(call tg_cmd,apply,icon/label) ; \
+	$(call tg_cmd,apply,icon/register)
+
 eip-destroy:
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/eip
+	$(call tg_cmd,destroy,icon/register)
 
 ############################
 # Single node in default vpc
 ############################
-.PHONY: apply-prep-module
 apply-prep-module:
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/eip; \
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
+	$(call tg_cmd,apply,icon/prep/eip) ; \
+	$(call tg_cmd,apply,icon/prep/prep-module)
 
-.PHONY: destroy-prep-module
 destroy-prep-module:
-	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module
+	$(call tg_cmd,destroy,icon/prep/prep-module)
 
 ###########################
 # Single node in custom vpc
 ###########################
-.PHONY: apply-prep-module-vpc
 apply-prep-module-vpc: apply-network
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc
+	$(call tg_cmd,apply-all,icon/prep/prep-module-vpc)
 
-.PHONY: destroy-prep-module-vpc
 destroy-prep-module-vpc:
-	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/prep/prep-module-vpc/prep
+	$(call tg_cmd,destroy,icon/prep/prep-module-vpc/prep) ; \
 	$(MAKE) destroy-network
 
 ###############
 # Network setup
 ###############
-.PHONY: apply-network
 apply-network:
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/label; \
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/network/vpc; \
-	terragrunt apply --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/vpc; \
-	terragrunt apply-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/security-groups
+	$(call tg_cmd,apply,icon/label) ; \
+	$(call tg_cmd,apply,icon/network/vpc) ; \
+	$(call tg_cmd,apply,icon/vpc) ; \
+	$(call tg_cmd,apply-all,icon/security-groups)
 
-.PHONY: destroy-network
 destroy-network:
-	terragrunt destroy-all --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/security-groups; \
-	terragrunt destroy --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir icon/network/vpc
-# --exclude-external-dependencies
+	$(call tg_cmd,destroy-all,icon/security-groups) ; \
+	$(call tg_cmd,destroy,icon/network/vpc)
 
 ######################
 # git actions - WIP!!!
