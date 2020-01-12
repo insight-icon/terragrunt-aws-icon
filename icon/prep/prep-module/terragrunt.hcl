@@ -7,6 +7,7 @@ include {
 }
 
 locals {
+  global = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("global.yaml")}"))
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
 
   # Dependencies
@@ -31,14 +32,14 @@ inputs = {
 
   monitoring = true
 
-  network_name = "testnet"
+  network_name = local.global.network_name
   eip_id = dependency.eip.outputs.eip_id
   main_ip = dependency.eip.outputs.public_ip
 
   ebs_volume_size = 150
-  root_volume_size = 25
+  root_volume_size = 50
 
-  instance_type = "t3.small"
+  instance_type = "t3.medium"
   volume_path = "/dev/xvdf"
 
   public_key_path = local.secrets["local_public_key"]

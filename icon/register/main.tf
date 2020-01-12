@@ -4,7 +4,7 @@ data "aws_region" "this" {}
 locals {
   region = var.region == "" ? data.aws_region.this.name : var.region
   bucket = var.bucket == "" ? "prep-registration-${random_pet.this.id}" : var.bucket
-  nid = var.network_name == "testnet" ? 2 : 1
+  nid = var.network_name == "testnet" ? 80 : var.network_name == "mainnet" ? 1 : ""
   url = var.network_name == "testnet" ? "https://zicon.net.solidwallet.io" : "https://ctz.solidwallet.io/api/v3"
 
   ip = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
