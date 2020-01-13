@@ -1,4 +1,4 @@
-SHELL := /usr/bin/env bash
+SHELL := /bin/bash -euxo pipefail
 
 .PHONY: help
 help:
@@ -82,40 +82,40 @@ destroy-network:
 .PHONY: clone-all
 clone-all:
 	meta git clone .; \
-	python scripts/make/subdir_cmd.py clone_all
+	python scripts/subdir_cmd.py clone_all
 
 .PHONY: status-all
 status-all:
 	meta git status .; \
-	python scripts/make/subdir_cmd.py status_all
+	python scripts/subdir_cmd.py status_all
 
 .PHONY: pull-all
 pull-all:
 	meta git stash .; \
 	meta git pull .; \
 	meta git stash apply .; \
-	python scripts/make/subdir_cmd.py stash_all ; \
-	python scripts/make/subdir_cmd.py pull_all ; \
-	python scripts/make/subdir_cmd.py stash_apply_all
+	python scripts/subdir_cmd.py stash_all ; \
+	python scripts/subdir_cmd.py pull_all ; \
+	python scripts/subdir_cmd.py stash_apply_all
 
 .PHONY: branch-all
 branch-all:
 	meta git checkout -b ${b}; \
-	python scripts/make/subdir_cmd.py branch_all ${b}
+	python scripts/subdir_cmd.py branch_all ${b}
 
 .PHONY: add-all
 add-all:
 	meta git add * .*; \
-	python scripts/make/subdir_cmd.py add_all
+	python scripts/subdir_cmd.py add_all
 
 .PHONY: commit-all
 commit-all:
 	meta git commit -m "${m}"; \
-	python scripts/make/subdir_cmd.py commit_all message="${m}"
+	python scripts/subdir_cmd.py commit_all message="${m}"
 
 .PHONY: push-all
 push-all:
 	meta git commit -m "${m}"; \
-	python scripts/make/subdir_cmd.py commit_all message="${m}"
+	python scripts/subdir_cmd.py commit_all message="${m}"
 
 

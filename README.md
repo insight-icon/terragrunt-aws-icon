@@ -11,7 +11,7 @@ This is the second iteration of an automated deployment for running nodes and su
 2. ##### Install prerequisites 
 	- [Check this section](#prerequisites)
 3. ##### Pull in dependencies 
-    - `meta git clone .`
+    - `make clone-all`
 4. ##### Make sure you have ssh keys
 	- `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f $HOME/.ssh/icon_node`
 
