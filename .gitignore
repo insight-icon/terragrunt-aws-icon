@@ -19,7 +19,8 @@ Pipfile.lock
 
 # Cookiecutter
 config.yaml
-!{{cookiecutter.environment}}-tmp/account.tfvars
+!{{cookiecutter.environment}}/account.tfvars
+!{{cookiecutter.environment}}/secrets.yaml
 
 
 # meta
