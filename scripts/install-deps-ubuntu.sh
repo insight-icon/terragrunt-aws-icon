@@ -7,9 +7,10 @@ sudo apt-get install -y python3.7-dev libsecp256k1-dev python3-pip curl git zip
 
 #2
 sudo pip3 requests==2.20.0
-sudo pip3 -H install cookiecutter preptools ansible awscli
+sudo pip3 install cookiecutter preptools ansible awscli fire
+
 #3
-wget https://releases.hashicorp.com/terraform/0.12.12/terraform_0.12.12_linux_amd64.zip -O /tmp/terraform.zip
+wget https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip -O /tmp/terraform.zip
 unzip /tmp/terraform.zip -d /tmp/
 sudo mv /tmp/terraform /usr/local/bin/terraform
 terraform --version

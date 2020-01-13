@@ -14,6 +14,7 @@ This is the second iteration of an automated deployment for running nodes and su
     - `make clone-all`
 4. ##### Make sure you have ssh keys
 	- `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f $HOME/.ssh/icon_node`
+	- Take note of the path that you create the keys in as you will need it in the next section
 
 5. #####  Fill in the necessary inputs in config files at base of directory 
 	- There are four file 
@@ -22,6 +23,7 @@ This is the second iteration of an automated deployment for running nodes and su
 		- `account.tfvars`
 		- `region.tfvars`
 	- Two files have examples that you can remove the `.example` file ending to get started 
+	- If you would like to get prompted for the inputs, run `cookiecutter .` and the files will be created for you. 
 
 	> ### Make sure you choose the right network in the `global.yaml` file. 
 6. ##### Register node
