@@ -17,11 +17,17 @@ This is the second iteration of an automated deployment for running nodes and su
 	- Take note of the path that you create the keys in as you will need it in the next section
 
 5. #####  Fill in the necessary inputs in config files at base of directory 
-	- There are four file 
-		- `global.yaml` 
+	- There are five files 
+		- `global.yaml`
+		    - Information about network and general setup  
 		- `secrets.yaml`
+		    - Secret values like the keystore password (yeah, we know...) and paths to ssh keys / keystore 
 		- `account.tfvars`
+		    - Your AWS account number
 		- `region.tfvars`
+		    - The region you deploy into.  Same as in global.yaml
+		- `node.yaml`
+		    - The specs for your node. 
 	- Two files have examples that you can remove the `.example` file ending to get started 
 	- If you would like to get prompted for the inputs, run `cookiecutter .` and the files will be created for you. 
 
