@@ -1,85 +1,71 @@
-SHELL := /bin/bash -euxo pipefail
+SHELL := /bin/bash -euo pipefail
 
-.PHONY: help
-help:
-	@echo 'Usage:'
-	@echo '    install-ubuntu 				Install basics to run node on mac - developers should do it manually'
-	@echo '    install-mac 					Install basics to run node on ubuntu - developers should do it manually'
-	@echo '    eip-register 				Register a wallet with an ICON network'
-	@echo '    apply-prep-module 			Deploy a P-Rep node on ICON in default VPC'
-	@echo '    destroy-prep-module 			Destroy the a P-Rep node on ICON from default VPC'
-	@echo '    apply-prep-module-vpc 		Deploy the a P-Rep node on ICON within a VPC'
-	@echo '    destroy-prep-module-vpc 		Destroy the a P-Rep node on ICON within VPC'
-	@echo '    clear-cache					Clear the cache of files left by terragrunt'
-	@echo '    WARNING - git actions are still a WIP - PR welcome!'
-	@echo '    make clone-all   						Clones all the sub repos'
-	@echo '    make pull-all   							Stashes, then pulls, stash apply on all the sub repos'
-	@echo '    make add-all   							Adds all the file on all the sub repos'
-	@echo '    make status-all   						git status on all the the sub repos'
-	@echo '    make b="<your branch name>" branch-all 	Branches all the sub repos'
-	@echo '    make m="<your commit message" commit-all Clones all the sub repos'
-	@echo '    make push-all 							Pushes all the sub repos'
+## ---------------------------------------------------------------------------------
+## Makefile to run terragrunt commands to setup P-Rep nodes for the ICON Blockchain.
+## ---------------------------------------------------------------------------------
 
+help: 								## Show help.
+	@sed -ne '/@sed/!s/## //p' $(MAKEFILE_LIST)
 
-install-deps-ubuntu:
+install-deps-ubuntu:  				## Install basics to run node on ubuntu - developers should do it manually
 	./scripts/install-deps-ubuntu.sh
 
-install-deps-mac:
+install-deps-mac:					## Install basics to run node on mac - developers should do it manually
 	./scripts/install-deps-brew.sh
 
-clear-cache:
+clear-cache:						## Clear the terragrunt and terraform caches
 	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \; && \
 	find . -type d -name ".terraform" -prune -exec rm -rf {} \;
 
-tg_cmd = terragrunt $(1) --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir $(2)
 
+tg_cmd = terragrunt $(1) --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir $(2)
 ##########
 # Register
 ##########
-eip-register:
+eip-register:						## Register the node by creating a static website with the appropriate information and elastic IP.  Idempotent
 	$(call tg_cmd,apply,icon/label) ; \
 	$(call tg_cmd,apply,icon/register)
 
-eip-destroy:
+eip-destroy:						## De-register the IP address and take down website.  Does not deregister the node
 	$(call tg_cmd,destroy,icon/register)
 
 ############################
 # Single node in default vpc
 ############################
-apply-prep-module:
+apply-prep-module:					## Apply the simplest P-Rep node configuration
 	$(call tg_cmd,apply,icon/prep/eip) ; \
 	$(call tg_cmd,apply,icon/prep/prep-module)
 
-destroy-prep-module:
+destroy-prep-module:				## Destroy the simplest P-Rep node configuration
 	$(call tg_cmd,destroy,icon/prep/prep-module)
 
 ###########################
 # Single node in custom vpc
 ###########################
-apply-prep-module-vpc: apply-network
+apply-prep-module-vpc: apply-network  ## Apply P-Rep node in custom VPC
 	$(call tg_cmd,apply-all,icon/prep/prep-module-vpc)
 
-destroy-prep-module-vpc:
+destroy-prep-module-vpc:			## Destroy P-Rep node in custom VPC
 	$(call tg_cmd,destroy,icon/prep/prep-module-vpc/prep) ; \
 	$(MAKE) destroy-network
 
 ###############
 # Network setup
 ###############
-apply-network:
+apply-network:						## Apply custom VPC
 	$(call tg_cmd,apply,icon/label) ; \
 	$(call tg_cmd,apply,icon/network/vpc) ; \
 	$(call tg_cmd,apply,icon/vpc) ; \
 	$(call tg_cmd,apply-all,icon/security-groups)
 
-destroy-network:
+destroy-network:					## Destroy custom VPC
 	$(call tg_cmd,destroy-all,icon/security-groups) ; \
 	$(call tg_cmd,destroy,icon/network/vpc)
 
 ######################
 # git actions - WIP!!!
 ######################
-.PHONY: clone-all
+.PHONY: clone-all					## Clone all the sub repos
 clone-all:
 	meta git clone .; \
 	python scripts/subdir_cmd.py clone_all
