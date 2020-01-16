@@ -76,9 +76,10 @@ resource "aws_s3_bucket_object" "logo_svg" {
 data "template_file" "details" {
   template = file("${path.module}/details.json")
   vars = {
-    logo_256 = var.logo_256
-    logo_1024 = var.logo_1024
-    logo_svg = var.logo_svg
+    logo_256 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_256)}"
+    logo_1024 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_1024)}"
+    logo_svg = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_svg)}"
+
     steemit = var.steemit
     twitter = var.twitter
     youtube = var.youtube
@@ -90,7 +91,7 @@ data "template_file" "details" {
     wechat = var.wechat
 
     country = var.organization_country
-    region = local.region
+    region = var.organization_city
     server_type = var.server_type
 
     ip = local.ip
