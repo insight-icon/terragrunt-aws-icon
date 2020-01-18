@@ -26,7 +26,7 @@ inputs = {
   ip = dependency.ec2.outputs.public_ip
   private_key_path = local.secrets["local_private_key"]
   user = "ubuntu"
-  playbook_file_path = "${local.ansible}/monitoring-ec2.yml"
+  playbook_file_path = "${local.ansible}/hids-elasticsearch-ec2.yml"
   roles_dir = "${local.ansible}/roles"
 
   # This is what needs to be filled in to make this work

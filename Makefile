@@ -17,6 +17,8 @@ clear-cache:						## Clear the terragrunt and terraform caches
 	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \; && \
 	find . -type d -name ".terraform" -prune -exec rm -rf {} \;
 
+make-configs:						## Prompt user to enter values into configs
+	cookiecutter .
 
 tg_cmd = terragrunt $(1) --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir $(2)
 ##########
@@ -42,7 +44,8 @@ destroy-prep-module:				## Destroy the simplest P-Rep node configuration
 ###########################
 # Single node in custom vpc
 ###########################
-apply-prep-module-vpc: apply-network  ## Apply P-Rep node in custom VPC
+apply-prep-module-vpc: 				 ## Apply P-Rep node in custom VPC
+	$(MAKE) apply-network
 	$(call tg_cmd,apply-all,icon/prep/prep-module-vpc)
 
 destroy-prep-module-vpc:			## Destroy P-Rep node in custom VPC
@@ -61,6 +64,24 @@ apply-network:						## Apply custom VPC
 destroy-network:					## Destroy custom VPC
 	$(call tg_cmd,destroy-all,icon/security-groups) ; \
 	$(call tg_cmd,destroy,icon/network/vpc)
+
+#######################
+# Monitoring single ec2
+#######################
+apply-monitoring-ec2: 				## Apply P-Rep node in custom VPC
+	$(call tg_cmd,apply-all,icon/monitoring/monitoring-ec2)
+
+destroy-monitoring-ec2:				## Destroy P-Rep node in custom VPC
+	$(call tg_cmd,destroy-all,icon/monitoring/monitoring-ec2)
+
+#################
+# HIDS single ec2
+#################
+apply-hids-ec2: 				## Apply P-Rep node in custom VPC
+	$(call tg_cmd,apply-all,icon/hids/hids-ec2)
+
+destroy-hids-ec2:				## Destroy P-Rep node in custom VPC
+	$(call tg_cmd,destroy-all,icon/hids/hids-ec2)
 
 ######################
 # git actions - WIP!!!
