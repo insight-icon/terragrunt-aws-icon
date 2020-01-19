@@ -14,13 +14,14 @@ data aws_route53_zone "private" {
   private_zone = true
 }
 
+
 variable "region" {
   default = "us-east-1"
 }
 
 data "aws_instances" "consul_ec2_instances" {
   instance_tags = {
-    Name = "icon-consul"
+    Name = "vault-servers"
   }
   instance_state_names = ["running"]
 }
@@ -34,7 +35,7 @@ data "aws_instance" "consul_ec2_indiv_instance" {
 ## Create A records for servers
 resource "aws_route53_record" "consul_servers" {
   allow_overwrite = true
-  name            = join(".", ["consul-srv", var.region])
+  name            = join(".", ["vault-srv", var.region])
   ttl             = 30
   type            = "A"
   zone_id         = data.aws_route53_zone.private.zone_id

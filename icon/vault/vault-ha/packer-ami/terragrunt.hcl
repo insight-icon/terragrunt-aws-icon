@@ -11,11 +11,11 @@ locals {
 }
 
 inputs = {
-  name = "consul"
+  name = "vault"
   distro = "ubuntu-18"
-  node = "consul"
+  node = "vault"
 
-  packer_config_path = "${local.packer}/remote/ubuntu-18/consul.json"
+  packer_config_path = "${local.packer}/remote/ubuntu-18/vault.json"
   packer_vars = {}
 }
 

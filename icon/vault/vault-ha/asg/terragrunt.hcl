@@ -7,7 +7,7 @@ include {
 
 locals {
   # Dependencies
-  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("sg")}/security-groups/sg-prep"
+  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("security-groups")}/sg-vault"
 }
 
 dependencies {
@@ -37,9 +37,10 @@ inputs = {
 
   additional_security_group_ids = [dependency.sg.outputs.this_security_group_id]
 
+// TODO: Check if we can eliminate this to only have access from within security groups, not cidr blocks
   allowed_inbound_cidr_blocks = ["10.0.0.0/8", "172.16.0.0/12"]
 
-  allowed_inbound_ssh_security_group_ids = [dependency.bastion_sg.outputs.this_security_group_id]
+  allowed_inbound_ssh_security_group_ids = local.global["bastion_enabled"] ? [dependency.bastion_sg.outputs.this_security_group_id] : []
 
   user_data = <<-EOF
               #!/bin/bash

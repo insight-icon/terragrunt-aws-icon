@@ -11,6 +11,6 @@ locals {
 }
 
 inputs = {
-  name = "consul"
-  local_public_key = local.account_vars["local_public_key"]
+  name = "vault"
+  local_public_key = local.secrets["local_public_key"]
 }

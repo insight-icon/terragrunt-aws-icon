@@ -7,12 +7,15 @@ include {
 }
 
 locals {
+  global = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("global.yaml")}"))
+
   # Dependencies
-  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("sg")}/security-groups/sg-consul"
+  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("security-groups")}/sg-consul"
+  vpc = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("vpc")}"
 }
 
 dependencies {
-  paths = [local.sg, "../packer-ami", "../keys"]
+  paths = [local.sg, "../packer-ami", "../keys", local.vpc]
 }
 
 dependency "sg" {
@@ -27,6 +30,10 @@ dependency "packer_ami" {
   config_path = "../packer-ami"
 }
 
+dependency "vpc" {
+  config_path = local.vpc
+}
+
 inputs = {
   name = "consul"
 
@@ -38,14 +45,10 @@ inputs = {
 
   additional_security_group_ids = [dependency.sg.outputs.this_security_group_id]
 
+// TODO: Check if we can eliminate this to only have access from within security groups, not cidr blocks
   allowed_inbound_cidr_blocks = ["10.0.0.0/8", "172.16.0.0/12"]
 
-  allowed_inbound_cidr_blocks = [
-    "10.0.0.0/8",
-    "172.16.0.0/12"
-  ]
-
-  allowed_inbound_ssh_security_group_ids  = [dependency.bastion_sg.outputs.this_security_group_id]
+  allowed_inbound_ssh_security_group_ids  =  local.global["bastion_enabled"] ? [dependency.bastion_sg.outputs.this_security_group_id] : []
 
   user_data = <<-EOF
                     #!/bin/bash
@@ -65,7 +68,7 @@ inputs = {
   cluster_size = 3
   cluster_tag_key = "consul-servers"
   cluster_tag_value = "auto-join"
-  availability_zones = dependency.vpc_support.outputs.azs
-  subnet_ids = dependency.vpc_support.outputs.public_subnets
+  availability_zones = dependency.vpc.outputs.azs
+  subnet_ids = dependency.vpc.outputs.public_subnets
   ssh_key_name = dependency.keys.outputs.key_name
 }
