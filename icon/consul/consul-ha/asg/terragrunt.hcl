@@ -8,7 +8,7 @@ include {
 
 locals {
   # Dependencies
-  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("sg")}/security-groups/sg-prep"
+  sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("sg")}/security-groups/sg-consul"
 }
 
 dependencies {

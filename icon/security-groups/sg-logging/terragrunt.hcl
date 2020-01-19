@@ -79,4 +79,13 @@ inputs = {
 
   ingress_cidr_blocks = local.global_vars["consul_enabled"] ? [dependency.vpc.outputs.vpc_cidr_block] : []
   ingress_rules = local.global_vars["consul_enabled"] ? ["consul-tcp", "consul-serf-wan-tcp", "consul-serf-wan-udp", "consul-serf-lan-tcp", "consul-serf-lan-udp", "consul-dns-tcp", "consul-dns-udp"] : []
+
+
+  egress_with_cidr_blocks = [{
+    from_port = 0
+    to_port = 65535
+    protocol = -1
+    description = "Egress access open to all"
+    cidr_blocks = "0.0.0.0/0"
+  },]
 }

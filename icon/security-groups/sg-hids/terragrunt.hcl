@@ -44,7 +44,17 @@ inputs = {
   description = "All traffic"
 
   vpc_id = dependency.vpc.outputs.vpc_id
-  tags = merge({Name: local.name}, dependency.label.outputs.tags)
+  tags = merge({
+    Name: local.name
+  }, dependency.label.outputs.tags)
+
+  egress_with_cidr_blocks = [{
+    from_port = 0
+    to_port = 65535
+    protocol = -1
+    description = "Egress access open to all"
+    cidr_blocks = "0.0.0.0/0"
+  },]
 
   ingress_with_cidr_blocks = [{
     from_port = 80
@@ -52,7 +62,7 @@ inputs = {
     protocol = "tcp"
     description = "http ingress"
     cidr_blocks = "0.0.0.0/0" # TODO: Fix this
-    }]
+  }]
 
   ingress_with_cidr_blocks = local.global_vars["bastion_enabled"] ? [] : [{
     from_port = 22
@@ -62,7 +72,7 @@ inputs = {
     cidr_blocks = local.secrets["corporate_ip"] == "" ? "0.0.0.0/0" : "${local.secrets["corporate_ip"]}/32"
   }]
 
-//  HIDS has two variants that we use, ossec and wazuh.  Wazuh integrates with elasticsearch so we use that exporter for monitoring
+  //  HIDS has two variants that we use, ossec and wazuh.  Wazuh integrates with elasticsearch so we use that exporter for monitoring
   ingress_with_source_security_group_id = concat(
   local.global_vars["monitoring_enabled"] ? [{
     from_port = 9100
