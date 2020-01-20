@@ -1,6 +1,5 @@
 terraform {
-  source = "${local.source}"
-
+  source = "github.com/insight-infrastructure/terraform-aws-ec2.git?ref=master"
 }
 
 include {
@@ -8,16 +7,6 @@ include {
 }
 
 locals {
-  repo_owner = "insight-infrastructure"
-  repo_name = "terraform-aws-ec2"
-  repo_version = "master"
-  repo_path = ""
-
-  local_source = false
-  modules_path = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("modules")}"
-
-  source = local.local_source ? "${local.modules_path}/${local.repo_name}" : "github.com/${local.repo_owner}/${local.repo_name}.git//${local.repo_path}?ref=${local.repo_version}"
-
   group_vars = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("group.yaml")}"))
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
 
