@@ -45,12 +45,10 @@ destroy-prep-module:				## Destroy the simplest P-Rep node configuration
 # Single node in custom vpc
 ###########################
 apply-prep-module-vpc: 				 ## Apply P-Rep node in custom VPC
-	$(MAKE) apply-network
 	$(call tg_cmd,apply-all,icon/prep/prep-module-vpc)
 
 destroy-prep-module-vpc:			## Destroy P-Rep node in custom VPC
-	$(call tg_cmd,destroy,icon/prep/prep-module-vpc/prep) ; \
-	$(MAKE) destroy-network
+	$(call tg_cmd,destroy,icon/prep/prep-module-vpc/prep) ;
 
 ###############
 # Network setup
