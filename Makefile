@@ -55,13 +55,13 @@ destroy-prep-module-vpc:			## Destroy P-Rep node in custom VPC
 ###############
 apply-network:						## Apply custom VPC
 	$(call tg_cmd,apply,icon/label) ; \
-	$(call tg_cmd,apply,icon/network/vpc) ; \
+	$(call tg_cmd,apply-all,icon/network) ; \
 	$(call tg_cmd,apply,icon/vpc) ; \
 	$(call tg_cmd,apply-all,icon/security-groups)
 
 destroy-network:					## Destroy custom VPC
 	$(call tg_cmd,destroy-all,icon/security-groups) ; \
-	$(call tg_cmd,destroy,icon/network/vpc)
+	$(call tg_cmd,destroy-all,icon/network)
 
 #######################
 # Monitoring single ec2
