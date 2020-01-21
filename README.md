@@ -17,21 +17,27 @@ This is the second iteration of an automated deployment for running nodes and su
 	- Take note of the path that you create the keys in as you will need it in the next section
 
 5. #####  Fill in the necessary inputs in config files at base of directory 
-	- There are five files 
-		- `global.yaml`
-		    - Information about network and general setup  
-		- `secrets.yaml`
-		    - Secret values like the keystore password (yeah, we know...) and paths to ssh keys / keystore 
-		- `account.tfvars`
-		    - Your AWS account number
-		- `region.tfvars`
-		    - The region you deploy into.  Same as in global.yaml
-		- `node.yaml`
-		    - The specs for your node. 
-	- Two files have examples that you can remove the `.example` file ending to get started 
-	- If you would like to get prompted for the inputs, run `cookiecutter .` and the files will be created for you. 
-
-	> ### Make sure you choose the right network in the `global.yaml` file. 
+    - You have numerous options to fill out the config files needed to run a deployment.
+    - All options require that you have the paths to your ssh keys and keystore
+    - Option #1 and #2 both overwrite your configs each time you do it 
+    - **Option #1** - Get prompted to fill in values 
+        - Run `make configs-prompt`
+    - **Option #2** - Fillout higher level config (best method)
+        - Change `config.yaml.examle` to `config.yaml` and fill out choices 
+        - Run `make configs-from-config`
+    - **Options #3** - Fill out lower level configs manually 
+        - There are five files 
+            - `global.yaml`
+                - Information about network and general setup  
+            - `secrets.yaml`
+                - Secret values like the keystore password (yeah, we know...) and paths to ssh keys / keystore 
+            - `account.tfvars`
+                - Your AWS account number
+            - `region.tfvars`
+                - The region you deploy into.  Same as in global.yaml
+            - `node.yaml`
+                - The specs for your node. 
+	> ##### Make sure you choose the right network!
 6. ##### Register node
 	- You will need to regster the node.  Check the official docs 
 	- Follow [this readme](icon/register/README.md) and fill in the appropriate information 
@@ -52,6 +58,20 @@ make apply-prep-module
 To turn off your node, run:
 ```bash
 make destroy-prep-module
+```
+
+To deploy advanced features, you will need to run a different set of commands to deploy a custom VPC as well. 
+
+```bash
+make apply-network 
+make apply-prep-module-vpc 
+make apply-<feature under development> 
+```
+And to destroy:
+```bash
+make destroy-network 
+make destroy-prep-module-vpc 
+make destroy-<feature under development> 
 ```
 
 ### Areas of Development 

@@ -17,8 +17,11 @@ clear-cache:						## Clear the terragrunt and terraform caches
 	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \; && \
 	find . -type d -name ".terraform" -prune -exec rm -rf {} \;
 
-make-configs:						## Prompt user to enter values into configs
+configs-prompt:						## Prompt user to enter values into configs
 	cookiecutter .
+
+configs-from-config:				## No input generation of config files from config.yaml
+	cookiecutter . --config-file=config.yaml --no-input
 
 tg_cmd = terragrunt $(1) --terragrunt-source-update --auto-approve --terragrunt-non-interactive --terragrunt-working-dir $(2)
 ##########

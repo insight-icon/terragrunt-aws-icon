@@ -9,24 +9,28 @@ network_name: testnet  # You must fill this in
 
 # These can change to your liking
 namespace: icon
-environment: dev
+environment: prod
 owner: insight
 
 # Need to specify 3 availablilty zones here and also the region in region.tfvars
 azs:
-  - us-east-2a
-  - us-east-2b
-  - us-east-2c
+  - us-east-1a
+  - us-east-1b
+  - us-east-1c
 
-# Don't worry about the rest of this for a basic node deployment
-domain_name: dev.insight-icon.net
+# In order to make DNS publicly available, you need to register a domain with AWS Route53 and enter the domain here.
+# If you have a domain from another registrar, you need to create a hosted zone in AWS with a subdomain, copy the name
+# servers, and enter them into your third party your registrar with an NS record to point to your created AWS zone.
+# If you don't want to use DNS, leave this blank (ie "").
+domain_name: "" # ie. dev.insight-icon.net
+# For consul and vault, we need to have an private DNS zone. This is set via <namespace>.internal convention.
 private_tld: icon.internal
 
 # These enable the security group settings and later will enable the deployment of specific services
 # When bastion is enabled, you do not get public ssh access
-vault_enabled: false
+vault_enabled: true
 bastion_enabled: false
-monitoring_enabled: false
-hids_enabled: false
-logging_enabled: false
-consul_enabled: false
+monitoring_enabled: true
+hids_enabled: true
+logging_enabled: true
+consul_enabled: true

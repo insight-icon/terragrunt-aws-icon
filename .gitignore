@@ -10,18 +10,23 @@
 # Sensitive config files
 account.tfvars
 secrets.yaml
-
-# Other
-experiment
-notes.md
-bu
-Pipfile.lock
+global.yaml
+nodes.yaml
+region.tfvars
 
 # Cookiecutter
 config.yaml
 !{{cookiecutter.environment}}/account.tfvars
 !{{cookiecutter.environment}}/secrets.yaml
+!{{cookiecutter.environment}}/region.tfvars
+!{{cookiecutter.environment}}/global.yaml
+!{{cookiecutter.environment}}/nodes.yaml
 
+# Other
+experiment
+notes.md
+*bu
+Pipfile.lock
 
 # meta
 packer/
