@@ -44,8 +44,6 @@ inputs = {
 //  root_volume_size = 25
 //  instance_type = "t3.large"
 
-  additional_playbook_vars = local.nodes["${local.name}"].additional_playbook_vars
-
   instance_type = local.nodes["${local.name}"].instance_type
   ebs_volume_size = local.nodes["${local.name}"].ebs_volume_size
   root_volume_size = local.nodes["${local.name}"].root_volume_size
@@ -58,6 +56,7 @@ inputs = {
   keystore_path = local.secrets["keystore_path"]
   keystore_password = local.secrets["keystore_password"]
 
-  playbook_file_path = "${local.ansible}/prep-basic-hardening.yml"
+  playbook_file_path = "${local.ansible}/prep-basic.yml"
   roles_dir = "${local.ansible}/roles"
+  playbook_vars = local.nodes["${local.name}"].additional_playbook_vars
 }
