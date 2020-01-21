@@ -66,20 +66,39 @@ destroy-network:					## Destroy custom VPC
 #######################
 # Monitoring single ec2
 #######################
-apply-monitoring-ec2: 				## Apply P-Rep node in custom VPC
+apply-monitoring-ec2: 				## Apply prometheus node in custom VPC
 	$(call tg_cmd,apply-all,icon/monitoring/monitoring-ec2)
 
-destroy-monitoring-ec2:				## Destroy P-Rep node in custom VPC
+destroy-monitoring-ec2:				## Destroy prometheus node in custom VPC
 	$(call tg_cmd,destroy-all,icon/monitoring/monitoring-ec2)
 
 #################
 # HIDS single ec2
 #################
-apply-hids-ec2: 				## Apply P-Rep node in custom VPC
+apply-hids-ec2: 					## Apply wazuh with elasticsearch node in custom VPC
 	$(call tg_cmd,apply-all,icon/hids/hids-ec2)
 
-destroy-hids-ec2:				## Destroy P-Rep node in custom VPC
+destroy-hids-ec2:					## Destroy HIDS with elasticsearch node in custom VPC
 	$(call tg_cmd,destroy-all,icon/hids/hids-ec2)
+
+###########
+# Consul HA
+###########
+apply-consul-ha: 				## Apply consul cluster in custom VPC
+	$(call tg_cmd,apply-all,icon/consul/consul-ha)
+
+destroy-consul-ha:				## Destroy consul cluster in custom VPC
+	$(call tg_cmd,destroy-all,icon/consul/consul-ha)
+
+##########
+# Vault HA
+##########
+apply-vault-ha: 				## Apply vault cluster in custom VPC
+	$(call tg_cmd,apply-all,icon/vault/vault-ha)
+
+destroy-vault-ha:				## Destroy vault cluster in custom VPC
+	$(call tg_cmd,destroy-all,icon/vault/vault-ha)
+
 
 ######################
 # git actions - WIP!!!

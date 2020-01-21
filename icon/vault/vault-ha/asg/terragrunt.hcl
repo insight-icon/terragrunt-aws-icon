@@ -8,10 +8,11 @@ include {
 locals {
   # Dependencies
   sg = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("security-groups")}/sg-vault"
+  vpc = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("vpc")}"
 }
 
 dependencies {
-  paths = [local.sg, "../packer-ami", "../keys"]
+  paths = [local.sg, "../packer-ami", "../keys", local.vpc]
 }
 
 dependency "sg" {
@@ -24,6 +25,10 @@ dependency "keys" {
 
 dependency "packer_ami" {
   config_path = "../packer-ami"
+}
+
+dependency "vpc" {
+  config_path = local.vpc
 }
 
 inputs = {
