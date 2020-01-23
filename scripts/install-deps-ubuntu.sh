@@ -8,7 +8,7 @@ sudo apt-get install -y python3.7-dev libsecp256k1-dev python3-pip curl git zip 
 
 #2
 sudo pip3 install requests==2.20.0
-sudo pip3 install cookiecutter preptools ansible awscli 
+sudo pip3 install cookiecutter preptools ansible awscli
 sudo pip install fire
 
 #3

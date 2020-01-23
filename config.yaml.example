@@ -5,8 +5,8 @@ default_context:
   namespace: "icon"
   environment: "prod"
   owner: "insight"
-  local_public_key: "~/.ssh/id_rsa.pub" # You need to have ssh keys on your machine.  Fill out the path here
-  local_private_key: "~/.ssh/id_rsa"
+  local_public_key: "/home/rob/.ssh/id_rsa.pub" # Full paths here. You need to have ssh keys on your machine.
+  local_private_key: "/home/rob/.ssh/id_rsa"
   domain_name: "" # You have to have domain in AWS to input this option
   corporate_ip: "1.2.3.4"  # Leave blank if you want to leave ssh port open to world
   keystore_path: "/full/path/to/keystore"

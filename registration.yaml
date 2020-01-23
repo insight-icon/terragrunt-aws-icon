@@ -1,0 +1,20 @@
+organization_name: "Insight-YourName"  # This needs to be unique 
+organization_country: "USA" # Three letter country code - Not relevant for testnet
+organization_email: "youremail@gmail.com" # Not relevant for testnet 
+organization_city: "San Francisco" # Not relevant for testnet
+organization_website: "https://insight-icon.net" # Not relevant for testnet
+
+# All the logos are complete paths to the image on your local drive
+logo_256: ""
+logo_1024: ""
+logo_svg: ""
+
+# All of this is optional
+steamit: ""
+twitter: ""
+youtube: ""
+facebook: ""
+github: ""
+reddit: ""
+keybase: ""
+telegram: ""

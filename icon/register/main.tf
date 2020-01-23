@@ -15,7 +15,7 @@ locals {
 resource "aws_eip" "this" {
   count = var.ip == null ? 1 : 0
   vpc = true
-  tags = var.tags
+  tags = local.tags
 
   lifecycle {
     prevent_destroy = false

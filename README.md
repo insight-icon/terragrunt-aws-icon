@@ -10,6 +10,7 @@ This is the second iteration of an automated deployment for running nodes and su
 	- Visit [this link](https://www.notion.so/insightbxplanning/AWS-Keys-Tutorial-175fa12e9b5b43509235a97fca275653) for more information 
 2. ##### Install prerequisites 
 	- [Check this section](#prerequisites)
+	- `make install-deps-ubuntu` or `make install-deps-mac` 
 3. ##### Pull in dependencies 
     - `make clone-all`
 4. ##### Make sure you have ssh keys
@@ -40,9 +41,9 @@ This is the second iteration of an automated deployment for running nodes and su
 	> ##### Make sure you choose the right network!
 6. ##### Register node
 	- You will need to regster the node.  Check the official docs 
-	- Follow [this readme](icon/register/README.md) and fill in the appropriate information 
+	- Fill out the config file `registration.yaml` appropriately 
 	- `make eip-register` 
-	- Copy output and run in shell 
+	- Copy the output "registration command" and run in shell. Command begins with preptools...
 	- This is a one time process for most people 
 	
 7. ##### Deploy node

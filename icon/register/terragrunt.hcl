@@ -7,10 +7,9 @@ include {
 }
 
 locals {
-//  register = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("register.yaml")}"))
-
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
   global = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("global.yaml")}"))
+  registration = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("registration.yaml")}"))
   label = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("label")}"
 }
 
@@ -24,26 +23,26 @@ dependency "label" {
 
 inputs = {
   // These five values are mandatory.  Fill them out per your teams information
-  organization_name = "Insight-N1"
-  organization_country = "USA" # This needs to be three letter country code
-  organization_email = "insight.icon.prep@gmail.com"
-  organization_city = "San Francisco"
-  organization_website = "https://insight-icon.net"
+  organization_name = local.registration["organization_name"]
+  organization_country = local.registration["organization_country"] # This needs to be three letter country code
+  organization_email = local.registration["organization_email"]
+  organization_city = local.registration["organization_city"]
+  organization_website = local.registration["organization_website"]
 
 // All the logos are complete paths to the image on your local drive
-  logo_256 = ""
-  logo_1024 = ""
-  logo_svg = ""
+  logo_256 = local.registration["logo_256"]
+  logo_1024 = local.registration["logo_1024"]
+  logo_svg = local.registration["logo_svg"]
 
 // All of this is optional
-  steamit = ""
-  twitter = ""
-  youtube = ""
-  facebook = ""
-  github = ""
-  reddit = ""
-  keybase = ""
-  telegram = ""
+  steamit = local.registration["steamit"]
+  twitter = local.registration["twitter"]
+  youtube = local.registration["youtube"]
+  facebook = local.registration["facebook"]
+  github = local.registration["github"]
+  reddit = local.registration["reddit"]
+  keybase = local.registration["keybase"]
+  telegram = local.registration["telegram"]
 
   // If you have already have an IP, you can enter it here / uncomment and a new IP will not be provisioned with the
 // existing IP being brought
