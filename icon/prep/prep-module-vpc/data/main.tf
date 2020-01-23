@@ -7,19 +7,17 @@ module "label" {
 
 data "aws_eip" "this" {
   filter {
-    name = "tag:Namespace"
-    values = [var.namespace]
+    name = "tag:Name"
+    values = ["${var.network_name}-ip"]
   }
 
-  filter {
-    name = "tag:Environment"
-    values = [var.environment]
-  }
-
-  filter {
-    name = "tag:NetworkName"
-    values = [var.network_name]
-  }
+//  dynamic "filter" {
+//    for_each = var.context.tags
+//    content {
+//      name = "tag:${filter.key}"
+//      values = [filter.value]
+//    }
+//  }
 }
 
 data "aws_vpc" "this" {
