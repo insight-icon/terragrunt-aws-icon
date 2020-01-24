@@ -11,7 +11,7 @@ default_context:
 
   # Leave blank (ie "") if you want to leave ssh port open to world.  If you specify an IP, only that IP will be allowed
   # to access your node.
-  corporate_ip: "1.2.3.4"
+  corporate_ip: ""
 
   # You need a keystore with at least 2001 ICX to register with. Download a copy from ICONex or other means.
   # We don't support ledger yet.
