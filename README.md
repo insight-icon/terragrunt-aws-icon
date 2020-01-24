@@ -27,7 +27,7 @@ This is the second iteration of an automated deployment for running nodes and su
         - Change `config.yaml.examle` to `config.yaml` and fill out choices 
         - Run `make configs-from-config`
     - **Options #3** - Fill out lower level configs manually 
-        - There are five files 
+        - There are five files generated from above options. Create them per above then edit manually. 
             - `global.yaml`
                 - Information about network and general setup  
             - `secrets.yaml`

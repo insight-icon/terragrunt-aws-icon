@@ -53,6 +53,15 @@ apply-prep-module-vpc: 				 ## Apply P-Rep node in custom VPC
 destroy-prep-module-vpc:			## Destroy P-Rep node in custom VPC
 	$(call tg_cmd,destroy,icon/prep/prep-module-vpc/prep) ;
 
+#######################
+# HA node in custom vpc
+#######################
+apply-prep-ha: 				 ## Apply HA P-Rep node in custom VPC
+	$(call tg_cmd,apply-all,icon/prep/prep-ha)
+
+destroy-prep-ha:			## Destroy HA P-Rep node in custom VPC
+	$(call tg_cmd,destroy-all,icon/prep/prep-ha) ;
+
 ###############
 # Network setup
 ###############
