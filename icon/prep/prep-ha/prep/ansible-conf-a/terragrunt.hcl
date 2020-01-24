@@ -15,7 +15,6 @@ locals {
   ansible_path = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("ansible")}"
 
   # Dependencies
-  eip = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("eip")}"
   ec2_a = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("ec2-a")}"
   ec2_b = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("ec2-b")}"
 }
@@ -39,6 +38,10 @@ dependency "ec2_b" {
 inputs = {
   ip = dependency.ip.outputs.public_ip
 
+  inventory = {
+
+  }
+
   private_key_path = local.secrets["local_private_key"]
 
   user = "ubuntu"
@@ -46,6 +49,7 @@ inputs = {
   playbook_file_path = "${local.ansible_path}/prep-ha.yml"
   roles_dir = "${local.ansible_path}/roles"
 
+// This needs to be filled in
   playbook_vars = {
     "keystore_path" : local.secrets["keystore_path"]
     "keystore_password": local.secrets["keystore_password"]
@@ -54,5 +58,6 @@ inputs = {
     "peer_hostname" : "az-b-hb"
     "peer_private_ip": dependency.ec2_b.outputs.private_ip
     "private_ip": dependency.ec2_a.outputs.private_ip
+    "slave_public_ip": dependency.ec2_b.outputs.public_ip
   }
 }

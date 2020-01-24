@@ -12,4 +12,9 @@ prep-module-vpc:
   additional_playbook_vars:
     ansible_hardening: "{{ cookiecutter.ansible_hardening_enabled }}"
 
-
+prep-ha:
+  instance_type: "{{ cookiecutter.instance_type }}"
+  ebs_volume_size: "{{ cookiecutter.ebs_volume_size }}"
+  root_volume_size: "{{ cookiecutter.root_volume_size }}"
+  additional_playbook_vars:
+    ansible_hardening: "{{ cookiecutter.ansible_hardening_enabled }}"
