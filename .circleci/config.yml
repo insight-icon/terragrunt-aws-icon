@@ -1,0 +1,32 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: insightinfrastructure/terragrunt-aws-ci@v0.1.0
+    steps:
+      - checkout
+      - run:
+          name: clone all dependencies
+          command: |
+            make clone-all
+      - run:
+          name: Apply module
+          command: |
+            make apply-network
+            make apply-prep-module-vpc
+            ./test/test-prep-module.sh
+      - run:
+          name: Destroy module
+          command: |
+            make destroy-prep-module-vpc
+            make destroy-network
+
+      - run:
+          name: Destroy on failure
+          command: |
+            wget https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.1.13/cloud-nuke_linux_amd64 -O ./cloud-nuke
+            chmod +x ./cloud-nuke
+            cloud-nuke
+          when: on_fail
+
