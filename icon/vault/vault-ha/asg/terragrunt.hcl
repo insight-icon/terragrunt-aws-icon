@@ -34,7 +34,7 @@ dependency "vpc" {
 inputs = {
   name = "vault"
 
-  cluster_name = "icon-vault"
+  cluster_name = "vault-servers"
   ami_id = dependency.packer_ami.outputs.ami_id
 
   instance_type = "t2.micro"
@@ -53,8 +53,7 @@ inputs = {
               EOF
 
   cluster_size = 3
-  cluster_tag_key = "vault-servers"
-  cluster_tag_value = "auto-join"
+
   availability_zones = dependency.vpc.outputs.azs
   subnet_ids = dependency.vpc.outputs.public_subnets
   ssh_key_name = dependency.keys.outputs.key_name
