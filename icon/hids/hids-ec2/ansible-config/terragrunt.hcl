@@ -30,5 +30,5 @@ inputs = {
   roles_dir = "${local.ansible}/roles"
 
   # This is what needs to be filled in to make this work
-  playbook_vars = {}
+  playbook_vars = {"beat": "filebeat"}
 }
