@@ -1,5 +1,5 @@
 terraform {
-  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=fix-az-order"
+  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=master"
 }
 
 include {
