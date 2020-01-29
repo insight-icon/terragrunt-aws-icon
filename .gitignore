@@ -1,19 +1,39 @@
 .idea
 
+# Terraform and terragrunt
 *.tfstate/
 *.tfstate.backup
 *.tfplan
-
 .terragrunt-cache/
 .terraform/
 
+# Sensitive config files
 account.tfvars
-private.tfvars
 secrets.yaml
+global.yaml
+nodes.yaml
+region.tfvars
 
+# Cookiecutter
+config.yaml
+!{{cookiecutter.environment}}/account.tfvars
+!{{cookiecutter.environment}}/secrets.yaml
+!{{cookiecutter.environment}}/region.tfvars
+!{{cookiecutter.environment}}/global.yaml
+!{{cookiecutter.environment}}/nodes.yaml
+
+# Other
+experiment
+notes.md
+*bu
+Pipfile.lock
+
+# meta
 packer/
 ansible/
-modules
+modules/
+
+dev
 
 #icon/bastion
 #icon/consul

@@ -64,6 +64,10 @@ data "aws_subnet" "private" {
   id = tolist(data.aws_subnet_ids.private.ids)[count.index]
 }
 
+output "azs" {
+  value = data.aws_subnet.public.*.availability_zone
+}
+
 output "vpc_id" {
   value = data.aws_vpc.tags.id
 }

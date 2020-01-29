@@ -1,0 +1,44 @@
+default_context:
+  # You MUST choose the right network.  Options are testnet and mainnet
+  network_name: "testnet"
+
+  # Specific account ID. If you have keys exported run `aws sts get-caller-identity | jq -r .Account`
+  account_id: "123456789012"
+
+  # These are the paths to the ssh keys that you creates before with "ssh-keygen -b 4096"
+  local_public_key: "/home/rob/.ssh/id_rsa.pub" # Full paths here, ie no "~"
+  local_private_key: "/home/rob/.ssh/id_rsa"
+
+  # Leave blank (ie "") if you want to leave ssh port open to world.  If you specify an IP, only that IP will be allowed
+  # to access your node.
+  corporate_ip: ""
+
+  # You need a keystore with at least 2001 ICX to register with. Download a copy from ICONex or other means.
+  # We don't support ledger yet.
+  keystore_path: "/full/path/to/keystore"
+  # We are in the process of removing the need for filling out this password.
+  keystore_password: "testing1."
+
+  # Not all regions have all the instance types available. Please choose a region close to you as we want node operators
+  # to have a diversity of node locations. Unfortunately we don't know of a good resource to check if your instance is
+  # available in your region so
+  region: "us-east-1"
+
+  # Server sizing
+  # For mainnet sub p-reps (under #30), instance_type can be t3.small or t2.medium
+  # For mainnet main p-reps (over #22), instance_type is m5.4xlarge
+  # For instances in between, you need to be ready to upgrade your node if you are getting close to being main p-rep
+  instance_type: "t3.small"
+  ebs_volume_size: 180 # Make this 30 for testnet
+  root_volume_size: 10 # Leave this as it is
+
+  # These aren't important.  Customize if you want
+  owner: "insight"
+  namespace: "icon"
+  environment: "prod"
+
+  # You have to have domain in AWS to input this option.  Generally this can be ignored unless using advanced features
+  domain_name: ""
+
+  # This should only be switched for certain types of testing. Generally ignore this.
+  ansible_hardening_enabled: true # This option will skip hardening steps that take additional 30 minutes to run

@@ -4,9 +4,8 @@ variable "aws_region" {
 
 variable "aws_allowed_account_ids" {
   description = "List of allowed AWS accounts where this configuration can be applied"
-  type        = list
+  type        = list(string)
 }
-
 
 provider "aws" {
   version = "~> 2.2"

@@ -44,15 +44,9 @@ inputs = {
   description = "All traffic"
 
   vpc_id = dependency.vpc.outputs.vpc_id
-  tags = merge({Name: local.name}, dependency.label.outputs.tags)
-
-  egress_with_cidr_blocks = [{
-    from_port = 0
-    to_port = 65535
-    protocol = -1
-    description = "Egress access open to all"
-    cidr_blocks = "0.0.0.0/0"
-  },]
+  tags = merge({
+    Name: local.name
+  }, dependency.label.outputs.tags)
 
   ingress_with_source_security_group_id = concat(local.global_vars["bastion_enabled"] ? [{
     rule = "ssh-tcp"
@@ -68,6 +62,12 @@ inputs = {
     to_port = 9323
     protocol = "tcp"
     description = "Docker Prometheus Metrics under /metrics endpoint"
+    source_security_group_id = dependency.monitoring_sg.outputs.this_security_group_id
+  }] : [], local.global_vars["hids_enabled"] ? [{
+    from_port = 1514
+    to_port = 1515
+    protocol = "tcp"
+    description = "wazuh agent ports for "
     source_security_group_id = dependency.monitoring_sg.outputs.this_security_group_id
   }] : [])
 
@@ -102,11 +102,20 @@ inputs = {
     protocol = "udp"
     description = "Corosync sync port"
     self = true
-  },{
+  }, {
     from_port = 5406
     to_port = 5406
     protocol = "udp"
     description = "Corosync sync port"
     self = true
   }]
+
+  egress_with_cidr_blocks = [{
+    from_port = 0
+    to_port = 65535
+    protocol = -1
+    description = "Egress access open to all"
+    cidr_blocks = "0.0.0.0/0"
+  },]
+
 }

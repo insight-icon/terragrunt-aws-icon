@@ -30,7 +30,7 @@ inputs = {
   enable_dns_hostnames = true
   enable_dns_support = true
 
-  azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  azs = local.global_vars["azs"]
 
   cidr = "10.0.0.0/16"
 

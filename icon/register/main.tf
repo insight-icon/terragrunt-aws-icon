@@ -4,7 +4,7 @@ data "aws_region" "this" {}
 locals {
   region = var.region == "" ? data.aws_region.this.name : var.region
   bucket = var.bucket == "" ? "prep-registration-${random_pet.this.id}" : var.bucket
-  nid = var.network_name == "testnet" ? 80 : 1
+  nid = var.network_name == "testnet" ? 80 : var.network_name == "mainnet" ? 1 : ""
   url = var.network_name == "testnet" ? "https://zicon.net.solidwallet.io" : "https://ctz.solidwallet.io/api/v3"
 
   ip = var.ip == null ? aws_eip.this.*.public_ip[0] : var.ip
@@ -15,7 +15,7 @@ locals {
 resource "aws_eip" "this" {
   count = var.ip == null ? 1 : 0
   vpc = true
-  tags = var.tags
+  tags = local.tags
 
   lifecycle {
     prevent_destroy = false
@@ -83,9 +83,10 @@ resource aws_s3_bucket_object "logo_svg" {
 resource template_file "details" {
   template = file("${path.module}/templates/details.json")
   vars = {
-    logo_256 = var.logo_256
-    logo_1024 = var.logo_1024
-    logo_svg = var.logo_svg
+    logo_256 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_256)}"
+    logo_1024 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_1024)}"
+    logo_svg = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_svg)}"
+
     steemit = var.steemit
     twitter = var.twitter
     youtube = var.youtube
@@ -97,7 +98,7 @@ resource template_file "details" {
     wechat = var.wechat
 
     country = var.organization_country
-    region = local.region
+    region = var.organization_city
     server_type = var.server_type
 
     ip = local.ip

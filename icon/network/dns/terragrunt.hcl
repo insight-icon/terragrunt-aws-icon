@@ -11,7 +11,7 @@ locals {
   secrets = yamldecode(file("${get_terragrunt_dir()}/${find_in_parent_folders("secrets.yaml")}"))
 
   # Dependencies
-  vpc = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/${find_in_parent_folders("vpc")}"
+  vpc = "../vpc"
 }
 
 dependencies {

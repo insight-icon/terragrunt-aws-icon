@@ -60,4 +60,12 @@ inputs = {
     description = "Nordstrom/ssh_exporter"
     source_security_group_id = dependency.monitoring_sg.outputs.this_security_group_id
   }] : []
+
+  egress_with_cidr_blocks = [{
+    from_port = 0
+    to_port = 65535
+    protocol = -1
+    description = "Egress access open to all"
+    cidr_blocks = "0.0.0.0/0"
+  },]
 }

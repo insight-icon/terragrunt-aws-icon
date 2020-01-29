@@ -11,6 +11,7 @@ consul_enabled: true
 
 Because of circular dependencies, two security groups have their rules applied separately.  They are `sg-consul-rules` and `sg-bastion-rules`.  These are applied off a fork of the official `terraform-aws-modules/terraform-aws-security-group` module to only apply rules instead of creating an additional security group.  This allows us to have a 1 to 1 mapping of security groups with their associated instances. 
 
+All security groups are tagged based on the label module in the parent dir so their state can be referenced either through a data source based on filter of tags , name, 
 
 See source for details on ports. 
 
