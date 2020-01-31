@@ -135,6 +135,10 @@ resource template_file "preptools_config" {
 # Persist objects
 #################
 resource "null_resource" "write_cfgs" {
+  triggers = {
+    build_always = timestamp()
+  }
+
   provisioner "local-exec" {
     command = <<-EOF
 echo '${template_file.preptools_config.rendered}' > ${path.module}/preptools_config.json
