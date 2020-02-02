@@ -153,100 +153,20 @@ resource "aws_s3_bucket_object" "details" {
   content = template_file.details.rendered
 }
 
-##########
-# Register
-##########
-// We need a way to store state of the registration in S3. If you register twice an error will pop up.
-// We can surpress that error but then we can't conditionally make a resource that updates an object to track state of registration
-// Instead we need to do it all with login in the null resource provision that first reads the object and whether it is true or not,
-// call the register function to
+###################
+# Register / Update
+###################
 
-resource aws_s3_bucket_object "register_bool" {
-  bucket = aws_s3_bucket.bucket.bucket
-  key = "register_bool"
-}
-
-data aws_s3_bucket_object "register_bool" {
-  bucket = aws_s3_bucket.bucket.bucket
-  key = "register_bool"
-  depends_on = [aws_s3_bucket_object.register_bool]
-}
-
-//resource "null_resource" "registerPRep" {
-//  count = data.aws_s3_bucket_object.register_bool.body == null ? 1 : 0
-//
-//  provisioner "local-exec" {
-//    command = <<-EOF
-//echo "Y" | preptools registerPRep --prep-json registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
-//EOF
-//  }
-//
-//  depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
-//}
-
-resource null_resource "registerPRep" {
+resource null_resource "preptools" {
   provisioner "local-exec" {
     command = <<-EOF
-#!/bin/bash
-aws s3api get-object --bucket ${aws_s3_bucket.bucket.bucket} --key ${aws_s3_bucket_object.register_bool.key} ${path.module}/register_bool
-register_state=`cat ${path.module}/register_bool`
-if [ -z $register_state ]; then
-  echo "Y" | preptools registerPRep --prep-json ${path.module}/registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
-else
-  echo "already registered"
-fi
+python ${path.module}/scripts/preptools_wrapper.py prep_reg ${var.network_name} ${var.keystore_path} ${path.module}/registerPRep.json ${var.keystore_password}
 EOF
   }
-// Run this every time with logic trigger in call to see if the object has a true value in it
   triggers = {
     build_always = timestamp()
   }
 
   depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
-}
-
-resource "aws_s3_bucket_object" "register_bool_true" {
-  bucket = aws_s3_bucket.bucket.bucket
-  key = "register_bool"
-  content = "true"
-  depends_on = [null_resource.registerPRep]
-}
-
-##########
-# set prep
-##########
-
-resource null_resource "setPRep" {
-// This logic is broken.  We need another parameter to skip this step on first run
-// Perhaps put a variable in an object setting the count of runs and only run this when count is >1
-// Logic already in for if any resource changes, run set prep
-//  provisioner "local-exec" {
-//    command = <<-EOF
-//#!/bin/bash
-//aws s3api get-object --bucket ${aws_s3_bucket.bucket.bucket} --key ${aws_s3_bucket_object.register_bool.key} ${path.module}/register_bool
-//register_state=`cat ${path.module}/register_bool`
-//if [ -z $register_state ]; then
-//  echo "Should not see this output ever - broken logic"
-//else
-//  echo "Setting prep"
-//fi
-//EOF
-//}
-
-  provisioner "local-exec" {
-    command = <<-EOF
-#!/bin/bash
-echo "Y" | preptools setPRep --prep-json ${path.module}/registerPRep.json -k ${var.keystore_path} -p ${var.keystore_password}
-EOF
-  }
-
-//  This makes the resource run when any of these change
-  triggers = {
-    details = template_file.details.rendered
-    register = template_file.registration.rendered
-    ip = var.ip == "" ? aws_eip.this.*.public_ip[0] : var.ip
-  }
-
-  depends_on = [aws_s3_bucket_object.register_bool_true]
 }
 
