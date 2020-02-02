@@ -59,11 +59,10 @@ inputs = {
 //  keystore_password = ""
   keystore_password = local.secrets["keystore_password"]
 
-// This MUST be set right from the get go. Options are `mainnet` or `testnet`
 // Fill it out in global.yaml at root
   network_name = local.global["network_name"]
 
-  // ------------------Details
+  // ------------------Detailstg
 
   server_type = "cloud"
 //  Populated by tfvars

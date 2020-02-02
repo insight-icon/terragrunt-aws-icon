@@ -53,6 +53,9 @@ resource "aws_s3_bucket" "bucket" {
 EOF
 }
 
+########
+# Images
+########
 resource "aws_s3_bucket_object" "logo_256" {
   count = var.logo_256 == "" ? 0 : 1
   bucket = aws_s3_bucket.bucket.bucket
@@ -67,14 +70,18 @@ resource "aws_s3_bucket_object" "logo_1024" {
   source = var.logo_1024
 }
 
-resource "aws_s3_bucket_object" "logo_svg" {
+resource aws_s3_bucket_object "logo_svg" {
   count = var.logo_svg == "" ? 0 : 1
   bucket = aws_s3_bucket.bucket.bucket
   key = basename(var.logo_svg)
   source = var.logo_svg
 }
-data "template_file" "details" {
-  template = file("${path.module}/details.json")
+
+###########
+# Templates
+###########
+resource template_file "details" {
+  template = file("${path.module}/templates/details.json")
   vars = {
     logo_256 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_256)}"
     logo_1024 = "http://${aws_s3_bucket.bucket.website_endpoint}/${basename(var.logo_1024)}"
@@ -98,8 +105,8 @@ data "template_file" "details" {
   }
 }
 
-data "template_file" "registration" {
-  template = file("${path.module}/registerPRep.json")
+resource "template_file" "registration" {
+  template = file("${path.module}/templates/registerPRep.json")
   vars = {
     name = var.organization_name
     country = var.organization_country
@@ -114,57 +121,52 @@ data "template_file" "registration" {
   depends_on = [aws_s3_bucket.bucket]
 }
 
+resource template_file "preptools_config" {
+  template = file("${path.module}/templates/preptools_config.json")
+  vars = {
+    nid = local.nid
+    url = local.url
+    keystore_path = var.keystore_path
+  }
+  depends_on = [aws_s3_bucket.bucket]
+}
+
+#################
+# Persist objects
+#################
+resource "null_resource" "write_cfgs" {
+  triggers = {
+    build_always = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOF
+echo '${template_file.preptools_config.rendered}' > ${path.module}/preptools_config.json
+echo '${template_file.registration.rendered}' > ${path.module}/registerPRep.json
+EOF
+  }
+}
+
 resource "aws_s3_bucket_object" "details" {
   bucket = aws_s3_bucket.bucket.bucket
   key    = "details.json"
-  content = data.template_file.details.rendered
+  content = template_file.details.rendered
 }
 
-//resource "null_resource" "registration" {
-//  provisioner "local-exec" {
-//    command = <<-EOF
-//echo "Y" | preptools registerPRep \
-//--url ${local.url} \
-//--nid ${local.nid} \
-//%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
-//%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
-//%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
-//%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
-//%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
-//%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
-//%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
-//--details http://${aws_s3_bucket.bucket.website_endpoint}/details.json \
-//--p2p-endpoint "${local.ip}:7100"
-//EOF
-//  }
-//
-//  triggers = {
-//    build_number = timestamp()
-//  }
-//
-//  depends_on = [aws_s3_bucket_object.details]
-//}
+###################
+# Register / Update
+###################
 
-//// TTD build logic to handle setPRep
-//resource "null_resource" "update_registration" {
-//  provisioner "local-exec" {
-//    command = <<-EOF
-//echo "Y" | preptools setPRep \
-//--url ${local.url} \
-//--nid ${local.nid} \
-//%{if var.keystore_path != ""}--keystore ${var.keystore_path}%{ endif } \
-//%{if var.keystore_password != ""}--password "${var.keystore_password}"%{ endif } \
-//%{if var.organization_name != ""}--name "${var.organization_name}"%{ endif } \
-//%{if var.organization_country != ""}--country "${var.organization_country}"%{ endif } \
-//%{if var.organization_city != ""}--city "${var.organization_city}"%{ endif } \
-//%{if var.organization_email != ""}--email "${var.organization_email}"%{ endif } \
-//%{if var.organization_website != ""}--website "${var.organization_website}"%{ endif } \
-//--details ${aws_s3_bucket.bucket.bucket_regional_domain_name}/details.json \
-//--p2p-endpoint "${local.ip}:7100"
-//EOF
-//  }
-//
-//  triggers = {
-//    build_number = timestamp()
-//  }
-//}
+resource null_resource "preptools" {
+  provisioner "local-exec" {
+    command = <<-EOF
+python ${path.module}/scripts/preptools_wrapper.py prep_reg ${var.network_name} ${var.keystore_path} ${path.module}/registerPRep.json ${var.keystore_password}
+EOF
+  }
+  triggers = {
+    build_always = timestamp()
+  }
+
+  depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
+}
+
