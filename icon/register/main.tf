@@ -134,17 +134,14 @@ resource template_file "preptools_config" {
 #################
 # Persist objects
 #################
-resource "null_resource" "write_cfgs" {
-  triggers = {
-    build_always = timestamp()
-  }
+resource "local_file" "preptools_config" {
+  filename = "preptools_config.json"
+  content = template_file.preptools_config.rendered
+}
 
-  provisioner "local-exec" {
-    command = <<-EOF
-echo '${template_file.preptools_config.rendered}' > ${path.module}/preptools_config.json
-echo '${template_file.registration.rendered}' > ${path.module}/registerPRep.json
-EOF
-  }
+resource "local_file" "registerPRep" {
+  filename = "registerPRep.json"
+  content = template_file.registration.rendered
 }
 
 resource "aws_s3_bucket_object" "details" {
@@ -167,6 +164,6 @@ EOF
     build_always = timestamp()
   }
 
-  depends_on = [aws_s3_bucket_object.details, null_resource.write_cfgs]
+  depends_on = [aws_s3_bucket_object.details, local_file.preptools_config, local_file.registerPRep]
 }
 
