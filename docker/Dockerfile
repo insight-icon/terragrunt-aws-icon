@@ -33,7 +33,8 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends \
     jq \
     netcat \
     openssh-server \
-    openssh-client
+    openssh-client \
+    rsync
 
 RUN apt-get install -y software-properties-common && add-apt-repository ppa:rmescandon/yq -y && apt-get install -y yq
 RUN apt-get clean &&  rm -r /var/lib/apt/lists/* && apt-get update && apt-get install gpg-agent -y
@@ -43,6 +44,7 @@ RUN pip install \
     cookiecutter \
     ansible \
     requests \
+    fire \
     && rm -rf /var/lib/apt/lists/*
 
 ARG TG_VERSION="v0.21.5"
