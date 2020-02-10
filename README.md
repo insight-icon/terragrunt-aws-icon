@@ -42,9 +42,9 @@ This is the second iteration of an automated deployment for running nodes and su
 6. ##### Register node
 	- You will need to regster the node.  Check the official docs 
 	- Fill out the config file `registration.yaml` appropriately 
-	- `make eip-register` 
-	- Copy the output "registration command" and run in shell. Command begins with preptools...
-	- This is a one time process for most people 
+	- Run `make eip-register`
+    - This is an idempotent process after you initially run it, as in you can run it as many times as you want and it will just update your information - for instance if you want to change your logo / links.
+	- This is a one time process for most people
 	
 7. ##### Deploy node
 	- We have several variations of the node deployment in various stages of development.  

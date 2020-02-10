@@ -47,8 +47,8 @@ RUN pip install \
     fire \
     && rm -rf /var/lib/apt/lists/*
 
-ARG TG_VERSION="v0.21.5"
-ARG TF_VERSION="0.12.14"
+ARG TG_VERSION="v0.21.11"
+ARG TF_VERSION="0.12.20"
 ARG PAKCER_VERSION=1.4.4
 
 #   Terraform
