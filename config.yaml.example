@@ -29,7 +29,7 @@ default_context:
   # For mainnet main p-reps (over #22), instance_type is m5.4xlarge
   # For instances in between, you need to be ready to upgrade your node if you are getting close to being main p-rep
   instance_type: "t3.small"
-  ebs_volume_size: 180 # Make this 30 for testnet
+  ebs_volume_size: 220 # Make this 30 for testnet
   root_volume_size: 10 # Leave this as it is
 
   # These aren't important.  Customize if you want
