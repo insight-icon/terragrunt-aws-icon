@@ -45,10 +45,11 @@ RUN pip install \
     ansible \
     requests \
     fire \
+    awscli \
     && rm -rf /var/lib/apt/lists/*
 
 ARG TG_VERSION="v0.21.11"
-ARG TF_VERSION="0.12.20"
+ARG TF_VERSION="0.12.21"
 ARG PAKCER_VERSION=1.4.4
 
 #   Terraform
