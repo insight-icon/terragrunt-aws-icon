@@ -1,11 +1,11 @@
 #
 # These items must be filled out all
 #
-organization_name: "Insight-YourName"  # This needs to be unique.  Don't register a team with the same name
-organization_country: "USA" # Three letter country code - Not relevant for testnet
-organization_email: "youremail@gmail.com" # Not relevant for testnet 
-organization_city: "San Francisco" # Not relevant for testnet
-organization_website: "https://insight-icon.net" # Not relevant for testnet
+organization_name: "Insight-N4"  # This needs to be unique.  Don't register a team with the same name
+organization_email: "youremail@gmail.com" # Must be valid email.  Is public so will want to use non-personal account
+organization_city: "San Francisco" # No restrictions
+organization_website: "https://insight-icon.net" # Has to begin with http
+organization_country: "USA" # Three letter country code - Make sure this exists here https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 
 
 #
