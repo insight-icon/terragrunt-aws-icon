@@ -1,5 +1,5 @@
 terraform {
-  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=master"
+  source = "github.com/insight-infrastructure/terraform-aws-icon-prep-basic.git?ref=v0.2.0"
 }
 
 include {
