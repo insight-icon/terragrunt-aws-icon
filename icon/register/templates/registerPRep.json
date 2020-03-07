@@ -1,9 +1,0 @@
-{
-    "name": "${name}",
-    "country": "${country}",
-    "city": "${city}",
-    "email": "${email}",
-    "website": "${website}",
-    "details": "${details_endpoint}",
-    "p2pEndpoint": "${ip}:7100"
-}
